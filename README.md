@@ -22,12 +22,12 @@
 
 | Role | Name | Enrollment No. | GitHub Username |
 |------|------|----------------|-----------------|
-| Group Lead | | | |
-| Member 2 | | | |
-| Member 3 | | | |
-| Member 4 | | | |
+| Group Lead | Lakshay Goyal | 2501010244 | lakshay122007 |
+| Member 2 | Mittal Lalit | 2501010276 | lalit0505 |
+| Member 3 | Mayank Bajoria | 2501010265 | Mayank-Bajoria|
+| Member 4 | Akshat Shukla | 2501010046 | Akshatshukla-25 |
 
-**Team No.:** ____ · **Section:** ____ · **Repository URL:** ____
+**Team No.:** T0075 · **Section:** A · **Repository URL:** https://github.com/lakshay122007/DE_Project_2026
 
 ---
 

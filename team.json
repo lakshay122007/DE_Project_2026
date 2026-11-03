@@ -1,0 +1,31 @@
+{
+  "team_number": "T0075",
+
+  "group_lead": {
+    "name": "Lakshay Goyal",
+    "enrollment_no": "2501010244",
+    "github": "lakshay122007"
+  },
+
+  "members": [
+    {
+      "name": "Mittal Lalit",
+      "enrollment_no": "2501010276",
+      "github": "lalit0505"
+    },
+    {
+      "name": "Mayank Bajoria",
+      "enrollment_no": "2501010265",
+      "github": "Mayank-Bajoria"
+    },
+    {
+      "name": "Akshat Shukla",
+      "enrollment_no": "2501010046",
+      "github": "Akshatshukla-25"
+    }
+  ],
+
+  "postgres_version": "18.6",
+
+  "laptop_used_for_benchmarks": "MacBook Pro, Apple M4, 16GB RAM"
+}
