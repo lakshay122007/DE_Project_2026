@@ -1,0 +1,111 @@
+erDiagram
+    cities                 ||--o{ clinics                : "has"
+    cities                 ||--o{ patients               : "home city of"
+    doctors                ||--o{ doctor_specializations : "has"
+    specializations        ||--o{ doctor_specializations : "describes"
+    doctors                ||--o{ doctor_schedules       : "works to"
+    clinics                |o--o{ doctor_schedules       : "hosts"
+    patients               ||--o{ appointments           : "books"
+    doctors                ||--o{ appointments           : "sees"
+    clinics                |o--o{ appointments           : "hosts"
+    appointments           ||--o| prescriptions          : "results in"
+    prescriptions          ||--o{ prescription_items     : "lists"
+    appointments           ||--o| doctor_reviews         : "gets"
+
+    cities {
+        int     city_id PK
+        varchar city_name UK
+        varchar state
+    }
+    specializations {
+        int     spec_id PK
+        varchar spec_name UK
+    }
+    doctors {
+        int      doctor_id PK
+        varchar  full_name
+        varchar  registration_no UK
+        varchar  gender
+        smallint experience_years
+        numeric  consultation_fee
+        numeric  video_fee "NULL = no video"
+        text_array languages
+        boolean  is_verified
+        date     joined_on
+    }
+    doctor_specializations {
+        int     doctor_id PK, FK
+        int     spec_id PK, FK
+        boolean is_primary
+    }
+    clinics {
+        int     clinic_id PK
+        varchar clinic_name
+        int     city_id FK
+        varchar locality
+        numeric latitude
+        numeric longitude
+        varchar phone
+    }
+    doctor_schedules {
+        int      doctor_id PK, FK
+        smallint weekday PK
+        time     start_time PK
+        time     end_time
+        int      clinic_id FK "NULL = video slot"
+        smallint slot_minutes
+    }
+    patients {
+        int         patient_id PK
+        varchar     full_name
+        varchar     phone UK
+        varchar     email UK "optional"
+        date        dob
+        varchar     gender
+        varchar     blood_group "optional"
+        text_array  allergies "optional"
+        int         city_id FK
+        timestamptz created_at
+    }
+    appointments {
+        int         appointment_id PK
+        int         patient_id FK
+        int         doctor_id FK
+        int         clinic_id FK "NULL = video"
+        varchar     consult_type
+        timestamptz booked_at
+        timestamptz slot_start
+        timestamptz slot_end
+        varchar     reason
+        varchar     status
+        timestamptz checked_in_at "optional"
+        timestamptz consult_started_at "optional"
+        timestamptz consult_ended_at "optional"
+        numeric     fee
+        varchar     payment_status
+    }
+    prescriptions {
+        int         prescription_id PK
+        int         appointment_id FK
+        varchar     diagnosis
+        text        notes "optional"
+        date        follow_up_date "optional"
+        timestamptz issued_at
+    }
+    prescription_items {
+        int      prescription_id PK, FK
+        smallint line_no PK
+        varchar  medicine_name
+        varchar  dosage
+        smallint duration_days
+        varchar  instructions
+    }
+    doctor_reviews {
+        int         review_id PK
+        int         appointment_id FK
+        smallint    rating
+        boolean     recommends
+        varchar     wait_time_bucket
+        text        review_text "optional"
+        timestamptz created_at
+    }
