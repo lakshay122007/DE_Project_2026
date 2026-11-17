@@ -103,3 +103,82 @@ Doctors and specializations are many-to-many through `doctor_specializations`. E
 ![ER diagram](../diagrams/er_diagram.png)
 
 Mermaid source: `diagrams/er_diagram.mmd`.
+
+## 5. Functional dependencies and normal forms
+
+| Table | Functional dependencies | Highest normal form |
+|---|---|---|
+| cities | city_id → city_name, state; city_name → city_id | BCNF |
+| specializations | spec_id → spec_name; spec_name → spec_id | BCNF |
+| doctors | doctor_id → all columns; registration_no → doctor_id | BCNF |
+| doctor_specializations | (doctor_id, spec_id) → is_primary | BCNF |
+| clinics | clinic_id → all columns; phone → clinic_id | BCNF |
+| doctor_schedules | (doctor_id, weekday, start_time) → end_time, clinic_id, slot_minutes | BCNF |
+| patients | patient_id → all columns; phone → patient_id; email → patient_id | BCNF |
+| appointments | appointment_id → all columns | 2NF, see note |
+| prescriptions | prescription_id → all columns; appointment_id → prescription_id | BCNF |
+| prescription_items | (prescription_id, line_no) → medicine_name, dosage, duration_days, instructions | BCNF |
+| doctor_reviews | review_id → all columns; appointment_id → review_id | BCNF |
+
+Deliberate departures from 3NF:
+
+- **appointments.fee** equals the doctor's `consultation_fee` or `video_fee` depending on `consult_type` (integrity check 3 found 0 exceptions). We store it anyway: it is the price at booking time, and a later fee change must not rewrite old appointments or finances.
+- **appointments.slot_end** equals `slot_start` plus the `slot_minutes` of the schedule row (integrity check 4 found 0 exceptions). It is stored so queries on slot ranges and overlaps do not have to join to the schedule.
+- **doctors.languages and patients.allergies** are arrays, so they are not atomic (1NF). The workload filters on them directly (R18 language search, R10 allergy safety), and a PostgreSQL array with its operators keeps those queries simple. The cost is that a single language or allergy cannot carry its own attributes or foreign key.
+- **prescription_items.medicine_name** is free text with no medicines table. Repeated names are accepted because the brief gives no medicine attributes.
+
+## 6. Derived columns
+
+| Column | Derived from | Kept stored because |
+|---|---|---|
+| appointments.fee | doctors.consultation_fee or video_fee by consult_type | Price snapshot at booking |
+| appointments.slot_end | slot_start + schedule slot_minutes | Fast overlap and range queries |
+| doctor_reviews.wait_time_bucket | Patient's reported wait, bucketed | Reviewers pick a bucket; the exact wait is not stored |
+| patient age | dob and the query date | Not stored: it changes every day, queries use `dob` |
+
+## 7. Load results
+
+`sql/02_load_data.sql` loads in foreign-key order (cities, specializations, doctors, clinics, doctor_specializations, doctor_schedules, patients, appointments, prescriptions, prescription_items, doctor_reviews) and ends with `ANALYZE`.
+
+| Table | Rows loaded | Expected | OK |
+|---|---:|---:|---|
+| cities | 10 | 10 | yes |
+| specializations | 15 | 15 | yes |
+| doctors | 3,000 | 3,000 | yes |
+| clinics | 1,500 | 1,500 | yes |
+| doctor_specializations | 3,700 | 3,700 | yes |
+| doctor_schedules | 30,499 | 30,499 | yes |
+| patients | 40,000 | 40,000 | yes |
+| appointments | 150,000 | 150,000 | yes |
+| prescriptions | 97,234 | 97,234 | yes |
+| prescription_items | 243,085 | 243,085 | yes |
+| doctor_reviews | 30,339 | 30,339 | yes |
+
+Before writing the schema we loaded every CSV as plain text and checked: duplicate keys (none), orphan foreign keys (none in all 12 relationships), formats, ranges, and which columns are empty together. Every constraint above is backed by that profile.
+
+## 8. Integrity checks and data problems
+
+`sql/03_integrity_checks.sql` tests rules that a single-table CHECK cannot express.
+
+| # | Rule | Violations |
+|---|---|---:|
+| 1 | Slot lies inside a schedule row of that doctor for that weekday | 0 |
+| 2 | In-clinic appointment is at a clinic where the doctor has a schedule | 0 |
+| 3 | Appointment fee equals the doctor fee for that consult type | 0 |
+| 4 | Appointment length equals the slot_minutes of its schedule row | 0 |
+| 5 | Prescription belongs to a COMPLETED appointment | 0 |
+| 6 | Review belongs to a COMPLETED appointment | 0 |
+| 7 | Review written after the slot ended | 0 |
+| 8 | No penicillin-allergic patient is prescribed amoxicillin | 726 |
+| 9 | No two active appointments of one doctor share a slot | 559 |
+
+Data problems found (the data stays as given; these are not silently fixed):
+
+1. **Penicillin allergy and amoxicillin: 726 prescribed medicine lines.** Amoxicillin is a penicillin-class antibiotic. This is a patient-safety issue and the reason query R10 exists. It cannot be a CHECK because it spans four tables.
+2. **Double bookings: 559 pairs of active appointments** for the same doctor at the same slot start. R24 lists them. A unique constraint on (doctor_id, slot_start) would reject the existing data, and it would also have to ignore cancelled bookings, so the rule is enforced by the application at booking time and monitored with R24.
+3. **consult_started_at earlier than checked_in_at in 16,183 appointments.** A consultation cannot start before the patient arrived, so either the check-in time or the start time is wrong. No CHECK is possible without rejecting these rows.
+4. **22,589 completed in-clinic appointments have no check-in time**, and 51,180 rows in total have an empty `checked_in_at`. Reception data is incomplete.
+5. **24,683 completed appointments are still PENDING payment** (R21 lists the in-clinic ones). Either payment was not recorded or the fee is genuinely unpaid.
+6. **6,021 cancelled appointments are PAID and not refunded**, while 8,879 are REFUNDED. Cancellation policy is not applied consistently.
+7. **894 doctors have no video fee and no video schedule**, which is consistent: they do not offer video.
+8. **`doctor_schedules.clinic_id` is NULL for 5,899 video rows.** Any query that uses `NOT IN` over this column returns no rows, because NOT IN with a NULL is never true. R13 must be written with NOT EXISTS (fixed in Phase 4).
