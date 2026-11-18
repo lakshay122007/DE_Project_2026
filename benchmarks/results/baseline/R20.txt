@@ -1,75 +1,75 @@
 === R20 run 1 ===
-WindowAgg  (cost=5721.38..5809.42 rows=594 width=44) (actual time=13.796..15.411 rows=26.00 loops=1)
+WindowAgg  (cost=5721.38..5809.42 rows=594 width=44) (actual time=14.365..16.196 rows=26.00 loops=1)
   Window: w1 AS (ORDER BY ((appointments.slot_start)::date))
   Storage: Memory  Maximum Storage: 17kB
   Buffers: shared hit=2758
-  ->  GroupAggregate  (cost=5721.23..5800.51 rows=594 width=12) (actual time=13.745..15.379 rows=26.00 loops=1)
+  ->  GroupAggregate  (cost=5721.23..5800.51 rows=594 width=12) (actual time=14.309..16.159 rows=26.00 loops=1)
         Group Key: ((appointments.slot_start)::date)
         Buffers: shared hit=2758
-        ->  Gather Merge  (cost=5721.23..5790.07 rows=604 width=4) (actual time=13.696..15.067 rows=6863.00 loops=1)
+        ->  Gather Merge  (cost=5721.23..5790.07 rows=604 width=4) (actual time=14.260..15.849 rows=6863.00 loops=1)
               Workers Planned: 1
               Workers Launched: 1
               Buffers: shared hit=2758
-              ->  Sort  (cost=4721.22..4722.11 rows=355 width=4) (actual time=11.850..11.972 rows=3431.50 loops=2)
+              ->  Sort  (cost=4721.22..4722.11 rows=355 width=4) (actual time=12.495..12.614 rows=3431.50 loops=2)
                     Sort Key: ((appointments.slot_start)::date)
                     Sort Method: quicksort  Memory: 97kB
                     Buffers: shared hit=2758
                     Worker 0:  Sort Method: quicksort  Memory: 97kB
-                    ->  Parallel Seq Scan on appointments  (cost=0.00..4706.18 rows=355 width=4) (actual time=10.212..11.592 rows=3431.50 loops=2)
+                    ->  Parallel Seq Scan on appointments  (cost=0.00..4706.18 rows=355 width=4) (actual time=10.896..12.241 rows=3431.50 loops=2)
                           Filter: (((status)::text = 'COMPLETED'::text) AND ((slot_start)::date >= '2026-06-01'::date) AND ((slot_start)::date <= '2026-06-30'::date))
                           Rows Removed by Filter: 71568
                           Buffers: shared hit=2720
 Planning:
-  Buffers: shared hit=114
-Planning Time: 0.343 ms
-Execution Time: 15.477 ms
+  Buffers: shared hit=117
+Planning Time: 0.361 ms
+Execution Time: 16.264 ms
 === R20 run 2 ===
-WindowAgg  (cost=5721.38..5809.42 rows=594 width=44) (actual time=13.679..15.213 rows=26.00 loops=1)
+WindowAgg  (cost=5721.38..5809.42 rows=594 width=44) (actual time=13.386..14.976 rows=26.00 loops=1)
   Window: w1 AS (ORDER BY ((appointments.slot_start)::date))
   Storage: Memory  Maximum Storage: 17kB
   Buffers: shared hit=2758
-  ->  GroupAggregate  (cost=5721.23..5800.51 rows=594 width=12) (actual time=13.628..15.181 rows=26.00 loops=1)
+  ->  GroupAggregate  (cost=5721.23..5800.51 rows=594 width=12) (actual time=13.337..14.945 rows=26.00 loops=1)
         Group Key: ((appointments.slot_start)::date)
         Buffers: shared hit=2758
-        ->  Gather Merge  (cost=5721.23..5790.07 rows=604 width=4) (actual time=13.580..14.872 rows=6863.00 loops=1)
+        ->  Gather Merge  (cost=5721.23..5790.07 rows=604 width=4) (actual time=13.288..14.632 rows=6863.00 loops=1)
               Workers Planned: 1
               Workers Launched: 1
               Buffers: shared hit=2758
-              ->  Sort  (cost=4721.22..4722.11 rows=355 width=4) (actual time=11.880..12.007 rows=3431.50 loops=2)
+              ->  Sort  (cost=4721.22..4722.11 rows=355 width=4) (actual time=11.618..11.742 rows=3431.50 loops=2)
                     Sort Key: ((appointments.slot_start)::date)
                     Sort Method: quicksort  Memory: 97kB
                     Buffers: shared hit=2758
                     Worker 0:  Sort Method: quicksort  Memory: 97kB
-                    ->  Parallel Seq Scan on appointments  (cost=0.00..4706.18 rows=355 width=4) (actual time=10.290..11.627 rows=3431.50 loops=2)
+                    ->  Parallel Seq Scan on appointments  (cost=0.00..4706.18 rows=355 width=4) (actual time=10.044..11.364 rows=3431.50 loops=2)
                           Filter: (((status)::text = 'COMPLETED'::text) AND ((slot_start)::date >= '2026-06-01'::date) AND ((slot_start)::date <= '2026-06-30'::date))
                           Rows Removed by Filter: 71568
                           Buffers: shared hit=2720
 Planning:
-  Buffers: shared hit=114
-Planning Time: 0.321 ms
-Execution Time: 15.278 ms
+  Buffers: shared hit=117
+Planning Time: 0.328 ms
+Execution Time: 15.042 ms
 === R20 run 3 ===
-WindowAgg  (cost=5721.38..5809.42 rows=594 width=44) (actual time=13.536..15.200 rows=26.00 loops=1)
+WindowAgg  (cost=5721.38..5809.42 rows=594 width=44) (actual time=13.588..15.221 rows=26.00 loops=1)
   Window: w1 AS (ORDER BY ((appointments.slot_start)::date))
   Storage: Memory  Maximum Storage: 17kB
   Buffers: shared hit=2758
-  ->  GroupAggregate  (cost=5721.23..5800.51 rows=594 width=12) (actual time=13.479..15.162 rows=26.00 loops=1)
+  ->  GroupAggregate  (cost=5721.23..5800.51 rows=594 width=12) (actual time=13.538..15.184 rows=26.00 loops=1)
         Group Key: ((appointments.slot_start)::date)
         Buffers: shared hit=2758
-        ->  Gather Merge  (cost=5721.23..5790.07 rows=604 width=4) (actual time=13.430..14.839 rows=6863.00 loops=1)
+        ->  Gather Merge  (cost=5721.23..5790.07 rows=604 width=4) (actual time=13.488..14.875 rows=6863.00 loops=1)
               Workers Planned: 1
               Workers Launched: 1
               Buffers: shared hit=2758
-              ->  Sort  (cost=4721.22..4722.11 rows=355 width=4) (actual time=11.740..11.861 rows=3431.50 loops=2)
+              ->  Sort  (cost=4721.22..4722.11 rows=355 width=4) (actual time=11.763..11.885 rows=3431.50 loops=2)
                     Sort Key: ((appointments.slot_start)::date)
                     Sort Method: quicksort  Memory: 97kB
                     Buffers: shared hit=2758
                     Worker 0:  Sort Method: quicksort  Memory: 97kB
-                    ->  Parallel Seq Scan on appointments  (cost=0.00..4706.18 rows=355 width=4) (actual time=10.166..11.489 rows=3431.50 loops=2)
+                    ->  Parallel Seq Scan on appointments  (cost=0.00..4706.18 rows=355 width=4) (actual time=10.183..11.511 rows=3431.50 loops=2)
                           Filter: (((status)::text = 'COMPLETED'::text) AND ((slot_start)::date >= '2026-06-01'::date) AND ((slot_start)::date <= '2026-06-30'::date))
                           Rows Removed by Filter: 71568
                           Buffers: shared hit=2720
 Planning:
-  Buffers: shared hit=114
-Planning Time: 0.324 ms
-Execution Time: 15.264 ms
+  Buffers: shared hit=117
+Planning Time: 0.331 ms
+Execution Time: 15.289 ms

@@ -111,7 +111,7 @@ CREATE TABLE appointments (
     fee                 NUMERIC(8,2)  NOT NULL,
     payment_status      VARCHAR(10)   NOT NULL,
     CONSTRAINT ck_appt_consult_type   CHECK (consult_type IN ('IN_CLINIC', 'VIDEO')),
-    CONSTRAINT ck_appt_status         CHECK (status IN ('BOOKED', 'COMPLETED', 'CANCELLED', 'NO_SHOW')),
+    CONSTRAINT ck_appt_status         CHECK (status IN ('BOOKED', 'CHECKED_IN', 'COMPLETED', 'CANCELLED', 'NO_SHOW')),
     CONSTRAINT ck_appt_payment        CHECK (payment_status IN ('PAID', 'PENDING', 'REFUNDED')),
     CONSTRAINT ck_appt_clinic_rule    CHECK ((consult_type = 'IN_CLINIC' AND clinic_id IS NOT NULL)
                                           OR (consult_type = 'VIDEO' AND clinic_id IS NULL)),
@@ -120,7 +120,8 @@ CREATE TABLE appointments (
     CONSTRAINT ck_appt_consult_order  CHECK (consult_ended_at IS NULL OR consult_started_at IS NULL OR consult_ended_at >= consult_started_at),
     CONSTRAINT ck_appt_fee            CHECK (fee >= 0),
     CONSTRAINT ck_appt_completed_times CHECK ((status = 'COMPLETED' AND consult_started_at IS NOT NULL AND consult_ended_at IS NOT NULL)
-                                          OR (status <> 'COMPLETED' AND checked_in_at IS NULL AND consult_started_at IS NULL AND consult_ended_at IS NULL)),
+                                          OR (status <> 'COMPLETED' AND consult_started_at IS NULL AND consult_ended_at IS NULL)),
+    CONSTRAINT ck_appt_checkin_status  CHECK (checked_in_at IS NULL OR status IN ('CHECKED_IN', 'COMPLETED', 'NO_SHOW')),
     CONSTRAINT ck_appt_video_checkin  CHECK (consult_type <> 'VIDEO' OR checked_in_at IS NULL),
     CONSTRAINT ck_appt_refund_rule    CHECK (payment_status <> 'REFUNDED' OR status = 'CANCELLED'),
     CONSTRAINT ck_appt_booked_pending CHECK (status <> 'BOOKED' OR payment_status = 'PENDING')

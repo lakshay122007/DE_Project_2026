@@ -1,54 +1,54 @@
 === R11 run 1 ===
-Sort  (cost=10700.92..10701.57 rows=262 width=16) (actual time=30.126..30.143 rows=430.00 loops=1)
+Sort  (cost=10700.92..10701.57 rows=262 width=16) (actual time=32.420..32.438 rows=430.00 loops=1)
   Sort Key: p.follow_up_date
   Sort Method: quicksort  Memory: 38kB
   Buffers: shared hit=5355
-  ->  Hash Right Anti Join  (cost=5084.34..10690.39 rows=262 width=16) (actual time=30.038..30.070 rows=430.00 loops=1)
+  ->  Hash Right Anti Join  (cost=5084.34..10690.39 rows=262 width=16) (actual time=32.331..32.366 rows=430.00 loops=1)
         Hash Cond: ((f.patient_id = a.patient_id) AND (f.doctor_id = a.doctor_id))
         Join Filter: (f.slot_start > a.slot_start)
         Rows Removed by Join Filter: 434
         Buffers: shared hit=5352
-        ->  Seq Scan on appointments f  (cost=0.00..4595.00 rows=134805 width=16) (actual time=0.004..15.338 rows=135100.00 loops=1)
+        ->  Seq Scan on appointments f  (cost=0.00..4595.00 rows=134805 width=16) (actual time=0.005..16.989 rows=135100.00 loops=1)
               Filter: ((status)::text <> 'CANCELLED'::text)
               Rows Removed by Filter: 14900
               Buffers: shared hit=2720
-        ->  Hash  (cost=5078.45..5078.45 rows=393 width=24) (actual time=6.581..6.582 rows=430.00 loops=1)
+        ->  Hash  (cost=5078.45..5078.45 rows=393 width=24) (actual time=7.159..7.161 rows=430.00 loops=1)
               Buckets: 1024  Batches: 1  Memory Usage: 32kB
               Buffers: shared hit=2632
-              ->  Nested Loop  (cost=0.42..5078.45 rows=393 width=24) (actual time=5.367..6.528 rows=430.00 loops=1)
+              ->  Nested Loop  (cost=0.42..5078.45 rows=393 width=24) (actual time=5.774..7.106 rows=430.00 loops=1)
                     Buffers: shared hit=2632
-                    ->  Seq Scan on prescriptions p  (cost=0.00..2370.51 rows=393 width=12) (actual time=5.354..5.846 rows=430.00 loops=1)
+                    ->  Seq Scan on prescriptions p  (cost=0.00..2370.51 rows=393 width=12) (actual time=5.764..6.281 rows=430.00 loops=1)
                           Filter: ((follow_up_date >= '2026-07-01'::date) AND (follow_up_date <= '2026-07-07'::date))
                           Rows Removed by Filter: 96804
                           Buffers: shared hit=912
-                    ->  Index Scan using appointments_pkey on appointments a  (cost=0.42..6.89 rows=1 width=20) (actual time=0.001..0.001 rows=1.00 loops=430)
+                    ->  Index Scan using appointments_pkey on appointments a  (cost=0.42..6.89 rows=1 width=20) (actual time=0.002..0.002 rows=1.00 loops=430)
                           Index Cond: (appointment_id = p.appointment_id)
                           Index Searches: 430
                           Buffers: shared hit=1720
 Planning:
-  Buffers: shared hit=339
-Planning Time: 0.812 ms
-Execution Time: 30.210 ms
+  Buffers: shared hit=344
+Planning Time: 0.917 ms
+Execution Time: 32.506 ms
 === R11 run 2 ===
-Sort  (cost=10700.92..10701.57 rows=262 width=16) (actual time=30.899..30.915 rows=430.00 loops=1)
+Sort  (cost=10700.92..10701.57 rows=262 width=16) (actual time=31.518..31.535 rows=430.00 loops=1)
   Sort Key: p.follow_up_date
   Sort Method: quicksort  Memory: 38kB
   Buffers: shared hit=5355
-  ->  Hash Right Anti Join  (cost=5084.34..10690.39 rows=262 width=16) (actual time=30.813..30.848 rows=430.00 loops=1)
+  ->  Hash Right Anti Join  (cost=5084.34..10690.39 rows=262 width=16) (actual time=31.430..31.465 rows=430.00 loops=1)
         Hash Cond: ((f.patient_id = a.patient_id) AND (f.doctor_id = a.doctor_id))
         Join Filter: (f.slot_start > a.slot_start)
         Rows Removed by Join Filter: 434
         Buffers: shared hit=5352
-        ->  Seq Scan on appointments f  (cost=0.00..4595.00 rows=134805 width=16) (actual time=0.005..16.058 rows=135100.00 loops=1)
+        ->  Seq Scan on appointments f  (cost=0.00..4595.00 rows=134805 width=16) (actual time=0.004..16.412 rows=135100.00 loops=1)
               Filter: ((status)::text <> 'CANCELLED'::text)
               Rows Removed by Filter: 14900
               Buffers: shared hit=2720
-        ->  Hash  (cost=5078.45..5078.45 rows=393 width=24) (actual time=6.593..6.594 rows=430.00 loops=1)
+        ->  Hash  (cost=5078.45..5078.45 rows=393 width=24) (actual time=6.792..6.793 rows=430.00 loops=1)
               Buckets: 1024  Batches: 1  Memory Usage: 32kB
               Buffers: shared hit=2632
-              ->  Nested Loop  (cost=0.42..5078.45 rows=393 width=24) (actual time=5.402..6.542 rows=430.00 loops=1)
+              ->  Nested Loop  (cost=0.42..5078.45 rows=393 width=24) (actual time=5.554..6.737 rows=430.00 loops=1)
                     Buffers: shared hit=2632
-                    ->  Seq Scan on prescriptions p  (cost=0.00..2370.51 rows=393 width=12) (actual time=5.391..5.868 rows=430.00 loops=1)
+                    ->  Seq Scan on prescriptions p  (cost=0.00..2370.51 rows=393 width=12) (actual time=5.542..6.034 rows=430.00 loops=1)
                           Filter: ((follow_up_date >= '2026-07-01'::date) AND (follow_up_date <= '2026-07-07'::date))
                           Rows Removed by Filter: 96804
                           Buffers: shared hit=912
@@ -57,37 +57,37 @@ Sort  (cost=10700.92..10701.57 rows=262 width=16) (actual time=30.899..30.915 ro
                           Index Searches: 430
                           Buffers: shared hit=1720
 Planning:
-  Buffers: shared hit=339
-Planning Time: 0.840 ms
-Execution Time: 30.980 ms
+  Buffers: shared hit=344
+Planning Time: 0.969 ms
+Execution Time: 31.611 ms
 === R11 run 3 ===
-Sort  (cost=10700.92..10701.57 rows=262 width=16) (actual time=30.266..30.283 rows=430.00 loops=1)
+Sort  (cost=10700.92..10701.57 rows=262 width=16) (actual time=31.587..31.604 rows=430.00 loops=1)
   Sort Key: p.follow_up_date
   Sort Method: quicksort  Memory: 38kB
   Buffers: shared hit=5355
-  ->  Hash Right Anti Join  (cost=5084.34..10690.39 rows=262 width=16) (actual time=30.178..30.212 rows=430.00 loops=1)
+  ->  Hash Right Anti Join  (cost=5084.34..10690.39 rows=262 width=16) (actual time=31.493..31.534 rows=430.00 loops=1)
         Hash Cond: ((f.patient_id = a.patient_id) AND (f.doctor_id = a.doctor_id))
         Join Filter: (f.slot_start > a.slot_start)
         Rows Removed by Join Filter: 434
         Buffers: shared hit=5352
-        ->  Seq Scan on appointments f  (cost=0.00..4595.00 rows=134805 width=16) (actual time=0.005..15.477 rows=135100.00 loops=1)
+        ->  Seq Scan on appointments f  (cost=0.00..4595.00 rows=134805 width=16) (actual time=0.005..16.422 rows=135100.00 loops=1)
               Filter: ((status)::text <> 'CANCELLED'::text)
               Rows Removed by Filter: 14900
               Buffers: shared hit=2720
-        ->  Hash  (cost=5078.45..5078.45 rows=393 width=24) (actual time=6.559..6.560 rows=430.00 loops=1)
+        ->  Hash  (cost=5078.45..5078.45 rows=393 width=24) (actual time=6.980..6.981 rows=430.00 loops=1)
               Buckets: 1024  Batches: 1  Memory Usage: 32kB
               Buffers: shared hit=2632
-              ->  Nested Loop  (cost=0.42..5078.45 rows=393 width=24) (actual time=5.331..6.506 rows=430.00 loops=1)
+              ->  Nested Loop  (cost=0.42..5078.45 rows=393 width=24) (actual time=5.639..6.924 rows=430.00 loops=1)
                     Buffers: shared hit=2632
-                    ->  Seq Scan on prescriptions p  (cost=0.00..2370.51 rows=393 width=12) (actual time=5.321..5.809 rows=430.00 loops=1)
+                    ->  Seq Scan on prescriptions p  (cost=0.00..2370.51 rows=393 width=12) (actual time=5.625..6.129 rows=430.00 loops=1)
                           Filter: ((follow_up_date >= '2026-07-01'::date) AND (follow_up_date <= '2026-07-07'::date))
                           Rows Removed by Filter: 96804
                           Buffers: shared hit=912
-                    ->  Index Scan using appointments_pkey on appointments a  (cost=0.42..6.89 rows=1 width=20) (actual time=0.001..0.001 rows=1.00 loops=430)
+                    ->  Index Scan using appointments_pkey on appointments a  (cost=0.42..6.89 rows=1 width=20) (actual time=0.002..0.002 rows=1.00 loops=430)
                           Index Cond: (appointment_id = p.appointment_id)
                           Index Searches: 430
                           Buffers: shared hit=1720
 Planning:
-  Buffers: shared hit=339
-Planning Time: 0.816 ms
-Execution Time: 30.347 ms
+  Buffers: shared hit=344
+Planning Time: 0.951 ms
+Execution Time: 31.676 ms
