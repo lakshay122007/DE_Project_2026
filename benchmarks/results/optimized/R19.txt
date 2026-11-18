@@ -1,0 +1,265 @@
+=== R19 run 1 ===
+Sort  (cost=582014.81..582022.31 rows=3000 width=36) (actual time=21.090..21.110 rows=480.00 loops=1)
+  Sort Key: ((SubPlan 1)) DESC
+  Sort Method: quicksort  Memory: 51kB
+  Buffers: shared hit=27174
+  ->  Hash Right Semi Join  (cost=124.92..581841.55 rows=3000 width=36) (actual time=0.778..20.992 rows=480.00 loops=1)
+        Hash Cond: (sc.doctor_id = d.doctor_id)
+        Buffers: shared hit=27171
+        ->  Nested Loop  (cost=6.42..435.14 rows=4880 width=4) (actual time=0.022..0.850 rows=3900.00 loops=1)
+              Buffers: shared hit=507
+              ->  Bitmap Heap Scan on clinics c  (cost=6.14..30.14 rows=240 width=4) (actual time=0.019..0.070 rows=240.00 loops=1)
+                    Recheck Cond: (city_id = 1)
+                    Heap Blocks: exact=21
+                    Buffers: shared hit=23
+                    ->  Bitmap Index Scan on idx_clinics_city  (cost=0.00..6.08 rows=240 width=0) (actual time=0.009..0.009 rows=240.00 loops=1)
+                          Index Cond: (city_id = 1)
+                          Index Searches: 1
+                          Buffers: shared hit=2
+              ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.29..1.49 rows=20 width=8) (actual time=0.001..0.002 rows=16.25 loops=240)
+                    Index Cond: (clinic_id = c.clinic_id)
+                    Heap Fetches: 0
+                    Index Searches: 240
+                    Buffers: shared hit=484
+        ->  Hash  (cost=81.00..81.00 rows=3000 width=20) (actual time=0.540..0.541 rows=3000.00 loops=1)
+              Buckets: 4096  Batches: 1  Memory Usage: 186kB
+              Buffers: shared hit=51
+              ->  Seq Scan on doctors d  (cost=0.00..81.00 rows=3000 width=20) (actual time=0.005..0.269 rows=3000.00 loops=1)
+                    Buffers: shared hit=51
+        SubPlan 1
+          ->  Aggregate  (cost=8.50..8.51 rows=1 width=8) (actual time=0.004..0.004 rows=1.00 loops=480)
+                Buffers: shared hit=1448
+                ->  Index Only Scan using idx_appt_doctor_slot on appointments a  (cost=0.42..8.49 rows=2 width=0) (actual time=0.003..0.004 rows=2.26 loops=480)
+                      Index Cond: ((doctor_id = d.doctor_id) AND (slot_start >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (slot_start < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                      Filter: ((status)::text = 'COMPLETED'::text)
+                      Rows Removed by Filter: 0
+                      Heap Fetches: 0
+                      Index Searches: 480
+                      Buffers: shared hit=1448
+        SubPlan 2
+          ->  Aggregate  (cost=185.22..185.23 rows=1 width=8) (actual time=0.035..0.035 rows=1.00 loops=480)
+                Buffers: shared hit=25165
+                ->  Bitmap Heap Scan on appointments a_1  (cost=4.81..185.10 rows=50 width=8) (actual time=0.008..0.029 rows=49.60 loops=480)
+                      Recheck Cond: (doctor_id = d.doctor_id)
+                      Heap Blocks: exact=23587
+                      Buffers: shared hit=25165
+                      ->  Bitmap Index Scan on idx_appt_doctor_slot  (cost=0.00..4.79 rows=50 width=0) (actual time=0.004..0.004 rows=49.60 loops=480)
+                            Index Cond: (doctor_id = d.doctor_id)
+                            Index Searches: 480
+                            Buffers: shared hit=1578
+Planning:
+  Buffers: shared hit=536
+Planning Time: 1.705 ms
+Execution Time: 21.216 ms
+=== R19 run 2 ===
+Sort  (cost=582014.81..582022.31 rows=3000 width=36) (actual time=21.650..21.671 rows=480.00 loops=1)
+  Sort Key: ((SubPlan 1)) DESC
+  Sort Method: quicksort  Memory: 51kB
+  Buffers: shared hit=27174
+  ->  Hash Right Semi Join  (cost=124.92..581841.55 rows=3000 width=36) (actual time=0.794..21.561 rows=480.00 loops=1)
+        Hash Cond: (sc.doctor_id = d.doctor_id)
+        Buffers: shared hit=27171
+        ->  Nested Loop  (cost=6.42..435.14 rows=4880 width=4) (actual time=0.022..0.838 rows=3900.00 loops=1)
+              Buffers: shared hit=507
+              ->  Bitmap Heap Scan on clinics c  (cost=6.14..30.14 rows=240 width=4) (actual time=0.018..0.069 rows=240.00 loops=1)
+                    Recheck Cond: (city_id = 1)
+                    Heap Blocks: exact=21
+                    Buffers: shared hit=23
+                    ->  Bitmap Index Scan on idx_clinics_city  (cost=0.00..6.08 rows=240 width=0) (actual time=0.010..0.011 rows=240.00 loops=1)
+                          Index Cond: (city_id = 1)
+                          Index Searches: 1
+                          Buffers: shared hit=2
+              ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.29..1.49 rows=20 width=8) (actual time=0.001..0.002 rows=16.25 loops=240)
+                    Index Cond: (clinic_id = c.clinic_id)
+                    Heap Fetches: 0
+                    Index Searches: 240
+                    Buffers: shared hit=484
+        ->  Hash  (cost=81.00..81.00 rows=3000 width=20) (actual time=0.552..0.553 rows=3000.00 loops=1)
+              Buckets: 4096  Batches: 1  Memory Usage: 186kB
+              Buffers: shared hit=51
+              ->  Seq Scan on doctors d  (cost=0.00..81.00 rows=3000 width=20) (actual time=0.005..0.277 rows=3000.00 loops=1)
+                    Buffers: shared hit=51
+        SubPlan 1
+          ->  Aggregate  (cost=8.50..8.51 rows=1 width=8) (actual time=0.003..0.003 rows=1.00 loops=480)
+                Buffers: shared hit=1448
+                ->  Index Only Scan using idx_appt_doctor_slot on appointments a  (cost=0.42..8.49 rows=2 width=0) (actual time=0.003..0.003 rows=2.26 loops=480)
+                      Index Cond: ((doctor_id = d.doctor_id) AND (slot_start >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (slot_start < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                      Filter: ((status)::text = 'COMPLETED'::text)
+                      Rows Removed by Filter: 0
+                      Heap Fetches: 0
+                      Index Searches: 480
+                      Buffers: shared hit=1448
+        SubPlan 2
+          ->  Aggregate  (cost=185.22..185.23 rows=1 width=8) (actual time=0.037..0.037 rows=1.00 loops=480)
+                Buffers: shared hit=25165
+                ->  Bitmap Heap Scan on appointments a_1  (cost=4.81..185.10 rows=50 width=8) (actual time=0.008..0.030 rows=49.60 loops=480)
+                      Recheck Cond: (doctor_id = d.doctor_id)
+                      Heap Blocks: exact=23587
+                      Buffers: shared hit=25165
+                      ->  Bitmap Index Scan on idx_appt_doctor_slot  (cost=0.00..4.79 rows=50 width=0) (actual time=0.004..0.004 rows=49.60 loops=480)
+                            Index Cond: (doctor_id = d.doctor_id)
+                            Index Searches: 480
+                            Buffers: shared hit=1578
+Planning:
+  Buffers: shared hit=536
+Planning Time: 1.801 ms
+Execution Time: 21.771 ms
+=== R19 run 3 ===
+Sort  (cost=582014.81..582022.31 rows=3000 width=36) (actual time=24.155..24.180 rows=480.00 loops=1)
+  Sort Key: ((SubPlan 1)) DESC
+  Sort Method: quicksort  Memory: 51kB
+  Buffers: shared hit=27174
+  ->  Hash Right Semi Join  (cost=124.92..581841.55 rows=3000 width=36) (actual time=0.968..24.043 rows=480.00 loops=1)
+        Hash Cond: (sc.doctor_id = d.doctor_id)
+        Buffers: shared hit=27171
+        ->  Nested Loop  (cost=6.42..435.14 rows=4880 width=4) (actual time=0.028..0.888 rows=3900.00 loops=1)
+              Buffers: shared hit=507
+              ->  Bitmap Heap Scan on clinics c  (cost=6.14..30.14 rows=240 width=4) (actual time=0.023..0.084 rows=240.00 loops=1)
+                    Recheck Cond: (city_id = 1)
+                    Heap Blocks: exact=21
+                    Buffers: shared hit=23
+                    ->  Bitmap Index Scan on idx_clinics_city  (cost=0.00..6.08 rows=240 width=0) (actual time=0.012..0.012 rows=240.00 loops=1)
+                          Index Cond: (city_id = 1)
+                          Index Searches: 1
+                          Buffers: shared hit=2
+              ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.29..1.49 rows=20 width=8) (actual time=0.001..0.002 rows=16.25 loops=240)
+                    Index Cond: (clinic_id = c.clinic_id)
+                    Heap Fetches: 0
+                    Index Searches: 240
+                    Buffers: shared hit=484
+        ->  Hash  (cost=81.00..81.00 rows=3000 width=20) (actual time=0.617..0.617 rows=3000.00 loops=1)
+              Buckets: 4096  Batches: 1  Memory Usage: 186kB
+              Buffers: shared hit=51
+              ->  Seq Scan on doctors d  (cost=0.00..81.00 rows=3000 width=20) (actual time=0.006..0.335 rows=3000.00 loops=1)
+                    Buffers: shared hit=51
+        SubPlan 1
+          ->  Aggregate  (cost=8.50..8.51 rows=1 width=8) (actual time=0.004..0.004 rows=1.00 loops=480)
+                Buffers: shared hit=1448
+                ->  Index Only Scan using idx_appt_doctor_slot on appointments a  (cost=0.42..8.49 rows=2 width=0) (actual time=0.003..0.003 rows=2.26 loops=480)
+                      Index Cond: ((doctor_id = d.doctor_id) AND (slot_start >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (slot_start < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                      Filter: ((status)::text = 'COMPLETED'::text)
+                      Rows Removed by Filter: 0
+                      Heap Fetches: 0
+                      Index Searches: 480
+                      Buffers: shared hit=1448
+        SubPlan 2
+          ->  Aggregate  (cost=185.22..185.23 rows=1 width=8) (actual time=0.042..0.042 rows=1.00 loops=480)
+                Buffers: shared hit=25165
+                ->  Bitmap Heap Scan on appointments a_1  (cost=4.81..185.10 rows=50 width=8) (actual time=0.008..0.034 rows=49.60 loops=480)
+                      Recheck Cond: (doctor_id = d.doctor_id)
+                      Heap Blocks: exact=23587
+                      Buffers: shared hit=25165
+                      ->  Bitmap Index Scan on idx_appt_doctor_slot  (cost=0.00..4.79 rows=50 width=0) (actual time=0.004..0.004 rows=49.60 loops=480)
+                            Index Cond: (doctor_id = d.doctor_id)
+                            Index Searches: 480
+                            Buffers: shared hit=1578
+Planning:
+  Buffers: shared hit=536
+Planning Time: 2.250 ms
+Execution Time: 24.305 ms
+=== R19 run 4 ===
+Sort  (cost=582014.81..582022.31 rows=3000 width=36) (actual time=29.587..29.618 rows=480.00 loops=1)
+  Sort Key: ((SubPlan 1)) DESC
+  Sort Method: quicksort  Memory: 51kB
+  Buffers: shared hit=27174
+  ->  Hash Right Semi Join  (cost=124.92..581841.55 rows=3000 width=36) (actual time=1.045..29.471 rows=480.00 loops=1)
+        Hash Cond: (sc.doctor_id = d.doctor_id)
+        Buffers: shared hit=27171
+        ->  Nested Loop  (cost=6.42..435.14 rows=4880 width=4) (actual time=0.036..0.946 rows=3900.00 loops=1)
+              Buffers: shared hit=507
+              ->  Bitmap Heap Scan on clinics c  (cost=6.14..30.14 rows=240 width=4) (actual time=0.031..0.101 rows=240.00 loops=1)
+                    Recheck Cond: (city_id = 1)
+                    Heap Blocks: exact=21
+                    Buffers: shared hit=23
+                    ->  Bitmap Index Scan on idx_clinics_city  (cost=0.00..6.08 rows=240 width=0) (actual time=0.016..0.017 rows=240.00 loops=1)
+                          Index Cond: (city_id = 1)
+                          Index Searches: 1
+                          Buffers: shared hit=2
+              ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.29..1.49 rows=20 width=8) (actual time=0.001..0.002 rows=16.25 loops=240)
+                    Index Cond: (clinic_id = c.clinic_id)
+                    Heap Fetches: 0
+                    Index Searches: 240
+                    Buffers: shared hit=484
+        ->  Hash  (cost=81.00..81.00 rows=3000 width=20) (actual time=0.633..0.634 rows=3000.00 loops=1)
+              Buckets: 4096  Batches: 1  Memory Usage: 186kB
+              Buffers: shared hit=51
+              ->  Seq Scan on doctors d  (cost=0.00..81.00 rows=3000 width=20) (actual time=0.007..0.348 rows=3000.00 loops=1)
+                    Buffers: shared hit=51
+        SubPlan 1
+          ->  Aggregate  (cost=8.50..8.51 rows=1 width=8) (actual time=0.004..0.004 rows=1.00 loops=480)
+                Buffers: shared hit=1448
+                ->  Index Only Scan using idx_appt_doctor_slot on appointments a  (cost=0.42..8.49 rows=2 width=0) (actual time=0.004..0.004 rows=2.26 loops=480)
+                      Index Cond: ((doctor_id = d.doctor_id) AND (slot_start >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (slot_start < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                      Filter: ((status)::text = 'COMPLETED'::text)
+                      Rows Removed by Filter: 0
+                      Heap Fetches: 0
+                      Index Searches: 480
+                      Buffers: shared hit=1448
+        SubPlan 2
+          ->  Aggregate  (cost=185.22..185.23 rows=1 width=8) (actual time=0.052..0.052 rows=1.00 loops=480)
+                Buffers: shared hit=25165
+                ->  Bitmap Heap Scan on appointments a_1  (cost=4.81..185.10 rows=50 width=8) (actual time=0.008..0.041 rows=49.60 loops=480)
+                      Recheck Cond: (doctor_id = d.doctor_id)
+                      Heap Blocks: exact=23587
+                      Buffers: shared hit=25165
+                      ->  Bitmap Index Scan on idx_appt_doctor_slot  (cost=0.00..4.79 rows=50 width=0) (actual time=0.004..0.004 rows=49.60 loops=480)
+                            Index Cond: (doctor_id = d.doctor_id)
+                            Index Searches: 480
+                            Buffers: shared hit=1578
+Planning:
+  Buffers: shared hit=536
+Planning Time: 1.927 ms
+Execution Time: 29.782 ms
+=== R19 run 5 ===
+Sort  (cost=582014.81..582022.31 rows=3000 width=36) (actual time=25.974..25.997 rows=480.00 loops=1)
+  Sort Key: ((SubPlan 1)) DESC
+  Sort Method: quicksort  Memory: 51kB
+  Buffers: shared hit=27174
+  ->  Hash Right Semi Join  (cost=124.92..581841.55 rows=3000 width=36) (actual time=0.881..25.883 rows=480.00 loops=1)
+        Hash Cond: (sc.doctor_id = d.doctor_id)
+        Buffers: shared hit=27171
+        ->  Nested Loop  (cost=6.42..435.14 rows=4880 width=4) (actual time=0.026..0.938 rows=3900.00 loops=1)
+              Buffers: shared hit=507
+              ->  Bitmap Heap Scan on clinics c  (cost=6.14..30.14 rows=240 width=4) (actual time=0.022..0.090 rows=240.00 loops=1)
+                    Recheck Cond: (city_id = 1)
+                    Heap Blocks: exact=21
+                    Buffers: shared hit=23
+                    ->  Bitmap Index Scan on idx_clinics_city  (cost=0.00..6.08 rows=240 width=0) (actual time=0.012..0.013 rows=240.00 loops=1)
+                          Index Cond: (city_id = 1)
+                          Index Searches: 1
+                          Buffers: shared hit=2
+              ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.29..1.49 rows=20 width=8) (actual time=0.001..0.002 rows=16.25 loops=240)
+                    Index Cond: (clinic_id = c.clinic_id)
+                    Heap Fetches: 0
+                    Index Searches: 240
+                    Buffers: shared hit=484
+        ->  Hash  (cost=81.00..81.00 rows=3000 width=20) (actual time=0.584..0.584 rows=3000.00 loops=1)
+              Buckets: 4096  Batches: 1  Memory Usage: 186kB
+              Buffers: shared hit=51
+              ->  Seq Scan on doctors d  (cost=0.00..81.00 rows=3000 width=20) (actual time=0.006..0.314 rows=3000.00 loops=1)
+                    Buffers: shared hit=51
+        SubPlan 1
+          ->  Aggregate  (cost=8.50..8.51 rows=1 width=8) (actual time=0.004..0.004 rows=1.00 loops=480)
+                Buffers: shared hit=1448
+                ->  Index Only Scan using idx_appt_doctor_slot on appointments a  (cost=0.42..8.49 rows=2 width=0) (actual time=0.004..0.004 rows=2.26 loops=480)
+                      Index Cond: ((doctor_id = d.doctor_id) AND (slot_start >= '2026-06-01 00:00:00+05:30'::timestamp with time zone) AND (slot_start < '2026-07-01 00:00:00+05:30'::timestamp with time zone))
+                      Filter: ((status)::text = 'COMPLETED'::text)
+                      Rows Removed by Filter: 0
+                      Heap Fetches: 0
+                      Index Searches: 480
+                      Buffers: shared hit=1448
+        SubPlan 2
+          ->  Aggregate  (cost=185.22..185.23 rows=1 width=8) (actual time=0.045..0.045 rows=1.00 loops=480)
+                Buffers: shared hit=25165
+                ->  Bitmap Heap Scan on appointments a_1  (cost=4.81..185.10 rows=50 width=8) (actual time=0.008..0.036 rows=49.60 loops=480)
+                      Recheck Cond: (doctor_id = d.doctor_id)
+                      Heap Blocks: exact=23587
+                      Buffers: shared hit=25165
+                      ->  Bitmap Index Scan on idx_appt_doctor_slot  (cost=0.00..4.79 rows=50 width=0) (actual time=0.004..0.004 rows=49.60 loops=480)
+                            Index Cond: (doctor_id = d.doctor_id)
+                            Index Searches: 480
+                            Buffers: shared hit=1578
+Planning:
+  Buffers: shared hit=536
+Planning Time: 1.874 ms
+Execution Time: 26.106 ms

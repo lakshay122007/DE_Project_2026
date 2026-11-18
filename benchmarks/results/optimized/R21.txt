@@ -1,0 +1,55 @@
+=== R21 run 1 ===
+Limit  (cost=0.29..4.32 rows=100 width=25) (actual time=0.469..0.482 rows=100.00 loops=1)
+  Buffers: shared hit=1 read=2
+  ->  Index Only Scan using idx_appt_unpaid_completed on appointments  (cost=0.29..933.15 rows=23117 width=25) (actual time=0.469..0.475 rows=100.00 loops=1)
+        Heap Fetches: 0
+        Index Searches: 1
+        Buffers: shared hit=1 read=2
+Planning:
+  Buffers: shared hit=224
+Planning Time: 0.673 ms
+Execution Time: 0.503 ms
+=== R21 run 2 ===
+Limit  (cost=0.29..4.32 rows=100 width=25) (actual time=0.052..0.065 rows=100.00 loops=1)
+  Buffers: shared hit=3
+  ->  Index Only Scan using idx_appt_unpaid_completed on appointments  (cost=0.29..933.15 rows=23117 width=25) (actual time=0.052..0.058 rows=100.00 loops=1)
+        Heap Fetches: 0
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=224
+Planning Time: 0.660 ms
+Execution Time: 0.096 ms
+=== R21 run 3 ===
+Limit  (cost=0.29..4.32 rows=100 width=25) (actual time=0.060..0.073 rows=100.00 loops=1)
+  Buffers: shared hit=3
+  ->  Index Only Scan using idx_appt_unpaid_completed on appointments  (cost=0.29..933.15 rows=23117 width=25) (actual time=0.059..0.065 rows=100.00 loops=1)
+        Heap Fetches: 0
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=224
+Planning Time: 0.750 ms
+Execution Time: 0.098 ms
+=== R21 run 4 ===
+Limit  (cost=0.29..4.32 rows=100 width=25) (actual time=0.053..0.066 rows=100.00 loops=1)
+  Buffers: shared hit=3
+  ->  Index Only Scan using idx_appt_unpaid_completed on appointments  (cost=0.29..933.15 rows=23117 width=25) (actual time=0.053..0.059 rows=100.00 loops=1)
+        Heap Fetches: 0
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=224
+Planning Time: 0.688 ms
+Execution Time: 0.087 ms
+=== R21 run 5 ===
+Limit  (cost=0.29..4.32 rows=100 width=25) (actual time=0.052..0.065 rows=100.00 loops=1)
+  Buffers: shared hit=3
+  ->  Index Only Scan using idx_appt_unpaid_completed on appointments  (cost=0.29..933.15 rows=23117 width=25) (actual time=0.051..0.057 rows=100.00 loops=1)
+        Heap Fetches: 0
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=224
+Planning Time: 0.687 ms
+Execution Time: 0.086 ms

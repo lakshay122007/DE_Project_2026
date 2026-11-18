@@ -1,0 +1,135 @@
+=== R17 run 1 ===
+GroupAggregate  (cost=8634.33..11032.02 rows=41699 width=72) (actual time=68.708..73.058 rows=36.00 loops=1)
+  Group Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+  Buffers: shared hit=873
+  ->  Sort  (cost=8634.33..8738.58 rows=41699 width=64) (actual time=68.637..70.074 rows=40670.00 loops=1)
+        Sort Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+        Sort Method: quicksort  Memory: 2674kB
+        Buffers: shared hit=873
+        ->  Hash Join  (cost=1455.42..5434.41 rows=41699 width=64) (actual time=7.933..48.146 rows=40670.00 loops=1)
+              Hash Cond: (a.patient_id = p.patient_id)
+              Buffers: shared hit=870
+              ->  Index Only Scan using idx_appt_slot_covering on appointments a  (cost=0.42..2306.22 rows=41699 width=12) (actual time=0.012..5.363 rows=40670.00 loops=1)
+                    Index Cond: (slot_start >= '2026-01-01 00:00:00+05:30'::timestamp with time zone)
+                    Filter: ((status)::text = 'COMPLETED'::text)
+                    Rows Removed by Filter: 10831
+                    Heap Fetches: 14
+                    Index Searches: 1
+                    Buffers: shared hit=315
+              ->  Hash  (cost=955.00..955.00 rows=40000 width=11) (actual time=7.860..7.860 rows=40000.00 loops=1)
+                    Buckets: 65536  Batches: 1  Memory Usage: 2219kB
+                    Buffers: shared hit=555
+                    ->  Seq Scan on patients p  (cost=0.00..955.00 rows=40000 width=11) (actual time=0.005..4.035 rows=40000.00 loops=1)
+                          Buffers: shared hit=555
+Planning:
+  Buffers: shared hit=432
+Planning Time: 1.318 ms
+Execution Time: 73.127 ms
+=== R17 run 2 ===
+GroupAggregate  (cost=8634.33..11032.02 rows=41699 width=72) (actual time=68.871..73.364 rows=36.00 loops=1)
+  Group Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+  Buffers: shared hit=873
+  ->  Sort  (cost=8634.33..8738.58 rows=41699 width=64) (actual time=68.796..70.234 rows=40670.00 loops=1)
+        Sort Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+        Sort Method: quicksort  Memory: 2674kB
+        Buffers: shared hit=873
+        ->  Hash Join  (cost=1455.42..5434.41 rows=41699 width=64) (actual time=7.895..48.886 rows=40670.00 loops=1)
+              Hash Cond: (a.patient_id = p.patient_id)
+              Buffers: shared hit=870
+              ->  Index Only Scan using idx_appt_slot_covering on appointments a  (cost=0.42..2306.22 rows=41699 width=12) (actual time=0.011..5.747 rows=40670.00 loops=1)
+                    Index Cond: (slot_start >= '2026-01-01 00:00:00+05:30'::timestamp with time zone)
+                    Filter: ((status)::text = 'COMPLETED'::text)
+                    Rows Removed by Filter: 10831
+                    Heap Fetches: 14
+                    Index Searches: 1
+                    Buffers: shared hit=315
+              ->  Hash  (cost=955.00..955.00 rows=40000 width=11) (actual time=7.817..7.818 rows=40000.00 loops=1)
+                    Buckets: 65536  Batches: 1  Memory Usage: 2219kB
+                    Buffers: shared hit=555
+                    ->  Seq Scan on patients p  (cost=0.00..955.00 rows=40000 width=11) (actual time=0.006..4.054 rows=40000.00 loops=1)
+                          Buffers: shared hit=555
+Planning:
+  Buffers: shared hit=432
+Planning Time: 1.451 ms
+Execution Time: 73.438 ms
+=== R17 run 3 ===
+GroupAggregate  (cost=8634.33..11032.02 rows=41699 width=72) (actual time=66.412..70.685 rows=36.00 loops=1)
+  Group Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+  Buffers: shared hit=873
+  ->  Sort  (cost=8634.33..8738.58 rows=41699 width=64) (actual time=66.344..67.766 rows=40670.00 loops=1)
+        Sort Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+        Sort Method: quicksort  Memory: 2674kB
+        Buffers: shared hit=873
+        ->  Hash Join  (cost=1455.42..5434.41 rows=41699 width=64) (actual time=7.881..46.293 rows=40670.00 loops=1)
+              Hash Cond: (a.patient_id = p.patient_id)
+              Buffers: shared hit=870
+              ->  Index Only Scan using idx_appt_slot_covering on appointments a  (cost=0.42..2306.22 rows=41699 width=12) (actual time=0.014..5.230 rows=40670.00 loops=1)
+                    Index Cond: (slot_start >= '2026-01-01 00:00:00+05:30'::timestamp with time zone)
+                    Filter: ((status)::text = 'COMPLETED'::text)
+                    Rows Removed by Filter: 10831
+                    Heap Fetches: 14
+                    Index Searches: 1
+                    Buffers: shared hit=315
+              ->  Hash  (cost=955.00..955.00 rows=40000 width=11) (actual time=7.792..7.793 rows=40000.00 loops=1)
+                    Buckets: 65536  Batches: 1  Memory Usage: 2219kB
+                    Buffers: shared hit=555
+                    ->  Seq Scan on patients p  (cost=0.00..955.00 rows=40000 width=11) (actual time=0.007..4.154 rows=40000.00 loops=1)
+                          Buffers: shared hit=555
+Planning:
+  Buffers: shared hit=432
+Planning Time: 1.536 ms
+Execution Time: 70.757 ms
+=== R17 run 4 ===
+GroupAggregate  (cost=8634.33..11032.02 rows=41699 width=72) (actual time=72.242..76.600 rows=36.00 loops=1)
+  Group Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+  Buffers: shared hit=873
+  ->  Sort  (cost=8634.33..8738.58 rows=41699 width=64) (actual time=72.170..73.617 rows=40670.00 loops=1)
+        Sort Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+        Sort Method: quicksort  Memory: 2674kB
+        Buffers: shared hit=873
+        ->  Hash Join  (cost=1455.42..5434.41 rows=41699 width=64) (actual time=8.926..51.480 rows=40670.00 loops=1)
+              Hash Cond: (a.patient_id = p.patient_id)
+              Buffers: shared hit=870
+              ->  Index Only Scan using idx_appt_slot_covering on appointments a  (cost=0.42..2306.22 rows=41699 width=12) (actual time=0.015..5.307 rows=40670.00 loops=1)
+                    Index Cond: (slot_start >= '2026-01-01 00:00:00+05:30'::timestamp with time zone)
+                    Filter: ((status)::text = 'COMPLETED'::text)
+                    Rows Removed by Filter: 10831
+                    Heap Fetches: 14
+                    Index Searches: 1
+                    Buffers: shared hit=315
+              ->  Hash  (cost=955.00..955.00 rows=40000 width=11) (actual time=8.825..8.826 rows=40000.00 loops=1)
+                    Buckets: 65536  Batches: 1  Memory Usage: 2219kB
+                    Buffers: shared hit=555
+                    ->  Seq Scan on patients p  (cost=0.00..955.00 rows=40000 width=11) (actual time=0.006..4.551 rows=40000.00 loops=1)
+                          Buffers: shared hit=555
+Planning:
+  Buffers: shared hit=432
+Planning Time: 1.421 ms
+Execution Time: 76.684 ms
+=== R17 run 5 ===
+GroupAggregate  (cost=8634.33..11032.02 rows=41699 width=72) (actual time=66.330..70.556 rows=36.00 loops=1)
+  Group Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+  Buffers: shared hit=873
+  ->  Sort  (cost=8634.33..8738.58 rows=41699 width=64) (actual time=66.260..67.675 rows=40670.00 loops=1)
+        Sort Key: (CASE WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '18 years'::interval) THEN '0-17'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '40 years'::interval) THEN '18-39'::text WHEN (age(((a.slot_start)::date)::timestamp with time zone, (p.dob)::timestamp with time zone) < '60 years'::interval) THEN '40-59'::text ELSE '60+'::text END), (COALESCE(p.blood_group, 'unknown'::character varying))
+        Sort Method: quicksort  Memory: 2674kB
+        Buffers: shared hit=873
+        ->  Hash Join  (cost=1455.42..5434.41 rows=41699 width=64) (actual time=8.216..46.498 rows=40670.00 loops=1)
+              Hash Cond: (a.patient_id = p.patient_id)
+              Buffers: shared hit=870
+              ->  Index Only Scan using idx_appt_slot_covering on appointments a  (cost=0.42..2306.22 rows=41699 width=12) (actual time=0.013..5.222 rows=40670.00 loops=1)
+                    Index Cond: (slot_start >= '2026-01-01 00:00:00+05:30'::timestamp with time zone)
+                    Filter: ((status)::text = 'COMPLETED'::text)
+                    Rows Removed by Filter: 10831
+                    Heap Fetches: 14
+                    Index Searches: 1
+                    Buffers: shared hit=315
+              ->  Hash  (cost=955.00..955.00 rows=40000 width=11) (actual time=8.124..8.125 rows=40000.00 loops=1)
+                    Buckets: 65536  Batches: 1  Memory Usage: 2219kB
+                    Buffers: shared hit=555
+                    ->  Seq Scan on patients p  (cost=0.00..955.00 rows=40000 width=11) (actual time=0.007..4.398 rows=40000.00 loops=1)
+                          Buffers: shared hit=555
+Planning:
+  Buffers: shared hit=432
+Planning Time: 1.517 ms
+Execution Time: 70.626 ms

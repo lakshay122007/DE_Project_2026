@@ -1,0 +1,45 @@
+=== R06 run 1 ===
+Index Scan using patients_phone_key on patients  (cost=0.29..8.31 rows=1 width=23) (actual time=0.021..0.022 rows=1.00 loops=1)
+  Index Cond: ((phone)::text = '9400000090'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=124
+Planning Time: 0.447 ms
+Execution Time: 0.050 ms
+=== R06 run 2 ===
+Index Scan using patients_phone_key on patients  (cost=0.29..8.31 rows=1 width=23) (actual time=0.015..0.015 rows=1.00 loops=1)
+  Index Cond: ((phone)::text = '9400000090'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=124
+Planning Time: 0.443 ms
+Execution Time: 0.042 ms
+=== R06 run 3 ===
+Index Scan using patients_phone_key on patients  (cost=0.29..8.31 rows=1 width=23) (actual time=0.018..0.018 rows=1.00 loops=1)
+  Index Cond: ((phone)::text = '9400000090'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=124
+Planning Time: 0.478 ms
+Execution Time: 0.049 ms
+=== R06 run 4 ===
+Index Scan using patients_phone_key on patients  (cost=0.29..8.31 rows=1 width=23) (actual time=0.016..0.017 rows=1.00 loops=1)
+  Index Cond: ((phone)::text = '9400000090'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=124
+Planning Time: 0.484 ms
+Execution Time: 0.047 ms
+=== R06 run 5 ===
+Index Scan using patients_phone_key on patients  (cost=0.29..8.31 rows=1 width=23) (actual time=0.022..0.023 rows=1.00 loops=1)
+  Index Cond: ((phone)::text = '9400000090'::text)
+  Index Searches: 1
+  Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=124
+Planning Time: 0.504 ms
+Execution Time: 0.055 ms

@@ -1,0 +1,60 @@
+=== W04 run 1 ===
+Update on appointments  (cost=0.28..98.42 rows=0 width=0) (actual time=30.436..30.437 rows=0.00 loops=1)
+  Buffers: shared hit=6115 read=211 dirtied=601 written=3
+  ->  Index Scan using idx_appt_open_slot_end on appointments  (cost=0.28..98.42 rows=357 width=44) (actual time=0.020..0.298 rows=329.00 loops=1)
+        Index Cond: (slot_end < '2026-07-02 00:00:00+05:30'::timestamp with time zone)
+        Filter: ((consult_ended_at IS NULL) AND ((status)::text = ANY ('{BOOKED,CHECKED_IN}'::text[])))
+        Index Searches: 1
+        Buffers: shared hit=306
+Planning:
+  Buffers: shared hit=239
+Planning Time: 0.758 ms
+Execution Time: 30.512 ms
+=== W04 run 2 ===
+Update on appointments  (cost=0.28..98.42 rows=0 width=0) (actual time=8.930..8.930 rows=0.00 loops=1)
+  Buffers: shared hit=6426 dirtied=10 written=4
+  ->  Index Scan using idx_appt_open_slot_end on appointments  (cost=0.28..98.42 rows=357 width=44) (actual time=0.025..0.339 rows=329.00 loops=1)
+        Index Cond: (slot_end < '2026-07-02 00:00:00+05:30'::timestamp with time zone)
+        Filter: ((consult_ended_at IS NULL) AND ((status)::text = ANY ('{BOOKED,CHECKED_IN}'::text[])))
+        Index Searches: 1
+        Buffers: shared hit=300
+Planning:
+  Buffers: shared hit=239
+Planning Time: 0.827 ms
+Execution Time: 9.018 ms
+=== W04 run 3 ===
+Update on appointments  (cost=0.28..98.42 rows=0 width=0) (actual time=6.955..6.955 rows=0.00 loops=1)
+  Buffers: shared hit=7039 dirtied=200 written=1
+  ->  Index Scan using idx_appt_open_slot_end on appointments  (cost=0.28..98.42 rows=357 width=44) (actual time=0.024..0.295 rows=329.00 loops=1)
+        Index Cond: (slot_end < '2026-07-02 00:00:00+05:30'::timestamp with time zone)
+        Filter: ((consult_ended_at IS NULL) AND ((status)::text = ANY ('{BOOKED,CHECKED_IN}'::text[])))
+        Index Searches: 1
+        Buffers: shared hit=300
+Planning:
+  Buffers: shared hit=239
+Planning Time: 0.730 ms
+Execution Time: 7.029 ms
+=== W04 run 4 ===
+Update on appointments  (cost=0.28..98.42 rows=0 width=0) (actual time=6.138..6.139 rows=0.00 loops=1)
+  Buffers: shared hit=6652 dirtied=32 written=1
+  ->  Index Scan using idx_appt_open_slot_end on appointments  (cost=0.28..98.42 rows=357 width=44) (actual time=0.033..0.349 rows=329.00 loops=1)
+        Index Cond: (slot_end < '2026-07-02 00:00:00+05:30'::timestamp with time zone)
+        Filter: ((consult_ended_at IS NULL) AND ((status)::text = ANY ('{BOOKED,CHECKED_IN}'::text[])))
+        Index Searches: 1
+        Buffers: shared hit=300
+Planning:
+  Buffers: shared hit=239
+Planning Time: 0.939 ms
+Execution Time: 6.239 ms
+=== W04 run 5 ===
+Update on appointments  (cost=0.28..98.42 rows=0 width=0) (actual time=5.765..5.765 rows=0.00 loops=1)
+  Buffers: shared hit=6610 dirtied=7 written=5
+  ->  Index Scan using idx_appt_open_slot_end on appointments  (cost=0.28..98.42 rows=357 width=44) (actual time=0.035..0.352 rows=329.00 loops=1)
+        Index Cond: (slot_end < '2026-07-02 00:00:00+05:30'::timestamp with time zone)
+        Filter: ((consult_ended_at IS NULL) AND ((status)::text = ANY ('{BOOKED,CHECKED_IN}'::text[])))
+        Index Searches: 1
+        Buffers: shared hit=300
+Planning:
+  Buffers: shared hit=239
+Planning Time: 1.028 ms
+Execution Time: 5.947 ms
