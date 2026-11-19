@@ -67,7 +67,87 @@ Queries whose text we did not change keep identical results by construction (onl
 
 ## 4. Before and after plans of the five biggest improvements
 
-//to be done
+The five queries with the largest absolute saving. Plan lines are copied from `benchmarks/results/baseline/<id>.txt` and `benchmarks/results/optimized/<id>.txt` (run 1 of each file shown; later runs are noted).
+
+### R19: 8,157.6 ms to 24.6 ms
+
+Before: the two correlated subqueries run once for each of the 480 Bengaluru doctors, and each run scans all of `appointments`.
+```
+SubPlan 1
+  -> Seq Scan on appointments a (actual time=9.257..9.779 rows=2.26 loops=480)
+       Rows Removed by Filter: 149998
+SubPlan 2
+  -> Seq Scan on appointments a_1 (actual time=0.149..7.235 rows=49.60 loops=480)
+       Rows Removed by Filter: 149950
+Execution Time: 8178.359 ms
+```
+After: one join with a FILTER aggregate, reading each doctor's appointments through the index.
+```
+-> Index Only Scan using idx_appt_doctor_slot on appointments a (actual time=0.003..0.004 rows=2.26 loops=480)
+-> Bitmap Index Scan on idx_appt_doctor_slot (actual time=0.004..0.004 rows=49.60 loops=480)
+Execution Time: 21.216 ms
+```
+
+### R22: 62.5 ms to 13.0 ms
+
+Before: the whole table is read and sorted, and the sort does not fit in memory.
+```
+Sort Method: external merge  Disk: 6176kB
+-> Seq Scan on appointments (actual time=0.011..15.939 rows=150000.00 loops=1)
+Execution Time: 60.288 ms
+```
+After: the covering index is read backwards, so there is no sort and no table access. It still walks 100,025 entries because of OFFSET 100000. Run 1 took 19.057 ms (cold cache), runs 2 to 5 about 11.4 ms.
+```
+-> Index Only Scan Backward using idx_appt_slot_covering on appointments (actual time=0.051..15.742 rows=100025.00 loops=1)
+Execution Time: 19.057 ms
+```
+
+### R11: 31.9 ms to 6.0 ms
+
+Before: Seq Scan of 150,000 appointments to probe for later bookings, plus a Seq Scan of prescriptions that discards 96,804 rows.
+```
+Seq Scan on appointments f (actual time=0.005..16.989 rows=135100.00 loops=1)
+Seq Scan on prescriptions p (actual time=5.764..6.281 rows=430.00 loops=1)
+  Rows Removed by Filter: 96804
+Execution Time: 32.506 ms
+```
+After: the one-week follow-up range comes from the partial index, and each of the 430 patients is checked through the patient index. Run 1 was 20.433 ms (cold cache), later runs about 2.4 ms.
+```
+Index Scan using idx_presc_follow_up on prescriptions p (actual time=0.585..0.796 rows=430.00 loops=1)
+Index Scan using idx_appt_patient_slot on appointments f (actual time=0.043..0.043 rows=0.00 loops=430)
+Execution Time: 20.433 ms
+```
+
+### R21: 16.0 ms to 0.17 ms
+
+Before: a parallel Seq Scan of all appointments, then a sort to find the latest 100.
+```
+Sort Method: top-N heapsort  Memory: 38kB
+-> Parallel Seq Scan on appointments (actual time=0.011..10.965 rows=12341.50 loops=2)
+     Rows Removed by Filter: 62658
+Execution Time: 16.051 ms
+```
+After: the partial index holds only unpaid completed rows in the order of the query, so exactly 100 index entries are read. Run 1 was 0.503 ms, later runs about 0.09 ms.
+```
+-> Index Only Scan using idx_appt_unpaid_completed on appointments (actual time=0.469..0.475 rows=100.00 loops=1)
+Execution Time: 0.503 ms
+```
+
+### R03: 15.2 ms to 0.15 ms
+
+Before: the taken-slot check scans all appointments.
+```
+-> Seq Scan on appointments a (actual time=0.316..14.387 rows=72.00 loops=1)
+     Rows Removed by Filter: 149928
+Execution Time: 14.499 ms
+```
+After: an Index Only Scan on the doctor's slots.
+```
+-> Index Only Scan using idx_appt_doctor_slot on appointments a (actual time=0.072..0.078 rows=72.00 loops=1)
+Execution Time: 0.168 ms
+```
+
+Run 1 of the optimized queries is slower than runs 2 to 5 for R11, R21 and R22. The first run reads index pages that are not yet in memory; later runs hit the cache. That is why the optimized benchmark uses 5 runs and reports the average.
 
 ## 5. Write overhead
 
