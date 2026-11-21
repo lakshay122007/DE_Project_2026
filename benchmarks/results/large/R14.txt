@@ -1,0 +1,126 @@
+=== R14 run 1 ===
+Limit  (cost=135656.53..135656.58 rows=20 width=76) (actual time=577.318..584.163 rows=20.00 loops=1)
+  Buffers: shared hit=13255 read=46132, temp read=13573 written=13808
+  ->  Sort  (cost=135656.53..135701.49 rows=17983 width=76) (actual time=577.317..584.161 rows=20.00 loops=1)
+        Sort Key: (round(avg(r.rating), 2)) DESC, (count(*)) DESC
+        Sort Method: top-N heapsort  Memory: 27kB
+        Buffers: shared hit=13255 read=46132, temp read=13573 written=13808
+        ->  Finalize GroupAggregate  (cost=117724.40..135178.01 rows=17983 width=76) (actual time=509.744..580.252 rows=28173.00 loops=1)
+              Group Key: a.doctor_id
+              Filter: (count(*) >= 10)
+              Rows Removed by Filter: 31811
+              Buffers: shared hit=13249 read=46132, temp read=13573 written=13808
+              ->  Gather Merge  (cost=117724.40..132804.25 rows=129478 width=52) (actual time=509.724..538.360 rows=171065.00 loops=1)
+                    Workers Planned: 2
+                    Workers Launched: 2
+                    Buffers: shared hit=13249 read=46132, temp read=13573 written=13808
+                    ->  Sort  (cost=116724.38..116859.25 rows=53949 width=52) (actual time=506.793..510.619 rows=57021.67 loops=3)
+                          Sort Key: a.doctor_id
+                          Sort Method: external merge  Disk: 4136kB
+                          Buffers: shared hit=13249 read=46132, temp read=13573 written=13808
+                          Worker 0:  Sort Method: external merge  Disk: 4136kB
+                          Worker 1:  Sort Method: external merge  Disk: 4152kB
+                          ->  Partial HashAggregate  (cost=108120.43..110639.67 rows=53949 width=52) (actual time=472.757..485.199 rows=57021.67 loops=3)
+                                Group Key: a.doctor_id
+                                Planned Partitions: 4  Batches: 5  Memory Usage: 8241kB  Disk Usage: 704kB
+                                Buffers: shared hit=13235 read=46132, temp read=12020 written=12252
+                                Worker 0:  Batches: 5  Memory Usage: 8241kB  Disk Usage: 696kB
+                                Worker 1:  Batches: 5  Memory Usage: 8241kB  Disk Usage: 712kB
+                                ->  Parallel Hash Join  (cost=12330.68..92599.19 rows=253408 width=7) (actual time=265.788..410.117 rows=202726.33 loops=3)
+                                      Hash Cond: (a.appointment_id = r.appointment_id)
+                                      Buffers: shared hit=13235 read=46132, temp read=11826 written=11852
+                                      ->  Parallel Seq Scan on appointments a  (cost=0.00..66229.00 rows=1250100 width=8) (actual time=0.101..86.495 rows=1000000.00 loops=3)
+                                            Buffers: shared hit=13235 read=40493
+                                      ->  Parallel Hash  (cost=8173.08..8173.08 rows=253408 width=7) (actual time=44.381..44.381 rows=202726.33 loops=3)
+                                            Buckets: 262144  Batches: 4  Memory Usage: 8064kB
+                                            Buffers: shared read=5639, temp written=1572
+                                            ->  Parallel Seq Scan on doctor_reviews r  (cost=0.00..8173.08 rows=253408 width=7) (actual time=0.062..17.312 rows=202726.33 loops=3)
+                                                  Buffers: shared read=5639
+Planning:
+  Buffers: shared hit=302 read=37
+Planning Time: 2.152 ms
+Execution Time: 585.295 ms
+=== R14 run 2 ===
+Limit  (cost=135656.53..135656.58 rows=20 width=76) (actual time=553.246..558.580 rows=20.00 loops=1)
+  Buffers: shared hit=13819 read=45568, temp read=13574 written=13820
+  ->  Sort  (cost=135656.53..135701.49 rows=17983 width=76) (actual time=553.245..558.578 rows=20.00 loops=1)
+        Sort Key: (round(avg(r.rating), 2)) DESC, (count(*)) DESC
+        Sort Method: top-N heapsort  Memory: 27kB
+        Buffers: shared hit=13819 read=45568, temp read=13574 written=13820
+        ->  Finalize GroupAggregate  (cost=117724.40..135178.01 rows=17983 width=76) (actual time=486.332..554.436 rows=28173.00 loops=1)
+              Group Key: a.doctor_id
+              Filter: (count(*) >= 10)
+              Rows Removed by Filter: 31811
+              Buffers: shared hit=13813 read=45568, temp read=13574 written=13820
+              ->  Gather Merge  (cost=117724.40..132804.25 rows=129478 width=52) (actual time=486.317..512.946 rows=171233.00 loops=1)
+                    Workers Planned: 2
+                    Workers Launched: 2
+                    Buffers: shared hit=13813 read=45568, temp read=13574 written=13820
+                    ->  Sort  (cost=116724.38..116859.25 rows=53949 width=52) (actual time=483.318..487.228 rows=57077.67 loops=3)
+                          Sort Key: a.doctor_id
+                          Sort Method: external merge  Disk: 4136kB
+                          Buffers: shared hit=13813 read=45568, temp read=13574 written=13820
+                          Worker 0:  Sort Method: external merge  Disk: 4144kB
+                          Worker 1:  Sort Method: external merge  Disk: 4152kB
+                          ->  Partial HashAggregate  (cost=108120.43..110639.67 rows=53949 width=52) (actual time=449.572..463.186 rows=57077.67 loops=3)
+                                Group Key: a.doctor_id
+                                Planned Partitions: 4  Batches: 5  Memory Usage: 8241kB  Disk Usage: 704kB
+                                Buffers: shared hit=13799 read=45568, temp read=12020 written=12263
+                                Worker 0:  Batches: 5  Memory Usage: 8241kB  Disk Usage: 704kB
+                                Worker 1:  Batches: 5  Memory Usage: 8241kB  Disk Usage: 704kB
+                                ->  Parallel Hash Join  (cost=12330.68..92599.19 rows=253408 width=7) (actual time=260.924..390.254 rows=202726.33 loops=3)
+                                      Hash Cond: (a.appointment_id = r.appointment_id)
+                                      Buffers: shared hit=13799 read=45568, temp read=11826 written=11864
+                                      ->  Parallel Seq Scan on appointments a  (cost=0.00..66229.00 rows=1250100 width=8) (actual time=0.092..86.466 rows=1000000.00 loops=3)
+                                            Buffers: shared hit=13517 read=40211
+                                      ->  Parallel Hash  (cost=8173.08..8173.08 rows=253408 width=7) (actual time=43.422..43.422 rows=202726.33 loops=3)
+                                            Buckets: 262144  Batches: 4  Memory Usage: 8064kB
+                                            Buffers: shared hit=282 read=5357, temp written=1580
+                                            ->  Parallel Seq Scan on doctor_reviews r  (cost=0.00..8173.08 rows=253408 width=7) (actual time=0.068..17.565 rows=202726.33 loops=3)
+                                                  Buffers: shared hit=282 read=5357
+Planning:
+  Buffers: shared hit=339
+Planning Time: 1.243 ms
+Execution Time: 559.713 ms
+=== R14 run 3 ===
+Limit  (cost=135656.53..135656.58 rows=20 width=76) (actual time=552.655..557.381 rows=20.00 loops=1)
+  Buffers: shared hit=14383 read=45004, temp read=13573 written=13821
+  ->  Sort  (cost=135656.53..135701.49 rows=17983 width=76) (actual time=552.654..557.378 rows=20.00 loops=1)
+        Sort Key: (round(avg(r.rating), 2)) DESC, (count(*)) DESC
+        Sort Method: top-N heapsort  Memory: 27kB
+        Buffers: shared hit=14383 read=45004, temp read=13573 written=13821
+        ->  Finalize GroupAggregate  (cost=117724.40..135178.01 rows=17983 width=76) (actual time=484.218..553.482 rows=28173.00 loops=1)
+              Group Key: a.doctor_id
+              Filter: (count(*) >= 10)
+              Rows Removed by Filter: 31811
+              Buffers: shared hit=14377 read=45004, temp read=13573 written=13821
+              ->  Gather Merge  (cost=117724.40..132804.25 rows=129478 width=52) (actual time=484.199..510.922 rows=171086.00 loops=1)
+                    Workers Planned: 2
+                    Workers Launched: 2
+                    Buffers: shared hit=14377 read=45004, temp read=13573 written=13821
+                    ->  Sort  (cost=116724.38..116859.25 rows=53949 width=52) (actual time=481.446..485.453 rows=57028.67 loops=3)
+                          Sort Key: a.doctor_id
+                          Sort Method: external merge  Disk: 4160kB
+                          Buffers: shared hit=14377 read=45004, temp read=13573 written=13821
+                          Worker 0:  Sort Method: external merge  Disk: 4128kB
+                          Worker 1:  Sort Method: external merge  Disk: 4136kB
+                          ->  Partial HashAggregate  (cost=108120.43..110639.67 rows=53949 width=52) (actual time=447.334..461.406 rows=57028.67 loops=3)
+                                Group Key: a.doctor_id
+                                Planned Partitions: 4  Batches: 5  Memory Usage: 8241kB  Disk Usage: 712kB
+                                Buffers: shared hit=14363 read=45004, temp read=12020 written=12265
+                                Worker 0:  Batches: 5  Memory Usage: 8241kB  Disk Usage: 696kB
+                                Worker 1:  Batches: 5  Memory Usage: 8241kB  Disk Usage: 696kB
+                                ->  Parallel Hash Join  (cost=12330.68..92599.19 rows=253408 width=7) (actual time=260.722..387.060 rows=202726.33 loops=3)
+                                      Hash Cond: (a.appointment_id = r.appointment_id)
+                                      Buffers: shared hit=14363 read=45004, temp read=11827 written=11864
+                                      ->  Parallel Seq Scan on appointments a  (cost=0.00..66229.00 rows=1250100 width=8) (actual time=0.090..85.194 rows=1000000.00 loops=3)
+                                            Buffers: shared hit=13799 read=39929
+                                      ->  Parallel Hash  (cost=8173.08..8173.08 rows=253408 width=7) (actual time=41.412..41.412 rows=202726.33 loops=3)
+                                            Buckets: 262144  Batches: 4  Memory Usage: 8064kB
+                                            Buffers: shared hit=564 read=5075, temp written=1576
+                                            ->  Parallel Seq Scan on doctor_reviews r  (cost=0.00..8173.08 rows=253408 width=7) (actual time=0.068..17.181 rows=202726.33 loops=3)
+                                                  Buffers: shared hit=564 read=5075
+Planning:
+  Buffers: shared hit=339
+Planning Time: 1.219 ms
+Execution Time: 558.594 ms

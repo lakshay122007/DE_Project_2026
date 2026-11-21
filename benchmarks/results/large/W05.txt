@@ -1,0 +1,36 @@
+=== W05 run 1 ===
+Update on appointments  (cost=0.43..8.45 rows=0 width=0) (actual time=0.369..0.369 rows=0.00 loops=1)
+  Buffers: shared hit=2 read=1
+  ->  Index Scan using idx_appt_doctor_slot on appointments  (cost=0.43..8.45 rows=1 width=82) (actual time=0.368..0.368 rows=0.00 loops=1)
+        Index Cond: ((doctor_id = 504) AND (slot_start >= '2026-07-03 00:00:00+05:30'::timestamp with time zone) AND (slot_start < '2026-07-04 00:00:00+05:30'::timestamp with time zone))
+        Filter: ((status)::text = 'BOOKED'::text)
+        Index Searches: 1
+        Buffers: shared hit=2 read=1
+Planning:
+  Buffers: shared hit=266 read=5
+Planning Time: 1.106 ms
+Execution Time: 0.452 ms
+=== W05 run 2 ===
+Update on appointments  (cost=0.43..8.45 rows=0 width=0) (actual time=0.013..0.014 rows=0.00 loops=1)
+  Buffers: shared hit=3
+  ->  Index Scan using idx_appt_doctor_slot on appointments  (cost=0.43..8.45 rows=1 width=82) (actual time=0.013..0.013 rows=0.00 loops=1)
+        Index Cond: ((doctor_id = 504) AND (slot_start >= '2026-07-03 00:00:00+05:30'::timestamp with time zone) AND (slot_start < '2026-07-04 00:00:00+05:30'::timestamp with time zone))
+        Filter: ((status)::text = 'BOOKED'::text)
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=271
+Planning Time: 0.843 ms
+Execution Time: 0.089 ms
+=== W05 run 3 ===
+Update on appointments  (cost=0.43..8.45 rows=0 width=0) (actual time=0.014..0.014 rows=0.00 loops=1)
+  Buffers: shared hit=3
+  ->  Index Scan using idx_appt_doctor_slot on appointments  (cost=0.43..8.45 rows=1 width=82) (actual time=0.013..0.013 rows=0.00 loops=1)
+        Index Cond: ((doctor_id = 504) AND (slot_start >= '2026-07-03 00:00:00+05:30'::timestamp with time zone) AND (slot_start < '2026-07-04 00:00:00+05:30'::timestamp with time zone))
+        Filter: ((status)::text = 'BOOKED'::text)
+        Index Searches: 1
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=271
+Planning Time: 0.948 ms
+Execution Time: 0.099 ms

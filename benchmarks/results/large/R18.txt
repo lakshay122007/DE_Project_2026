@@ -1,0 +1,120 @@
+=== R18 run 1 ===
+Unique  (cost=10730.70..10840.15 rows=7180 width=76) (actual time=102.391..122.901 rows=7200.00 loops=1)
+  Buffers: shared hit=10604 read=1693, temp read=560 written=561
+  ->  Sort  (cost=10730.70..10752.59 rows=8756 width=76) (actual time=102.389..109.977 rows=57600.00 loops=1)
+        Sort Key: d.consultation_fee, d.doctor_id, d.full_name, d.languages
+        Sort Method: external merge  Disk: 4480kB
+        Buffers: shared hit=10604 read=1693, temp read=560 written=561
+        ->  Hash Join  (cost=1283.70..10157.36 rows=8756 width=76) (actual time=4.425..27.817 rows=57600.00 loops=1)
+              Hash Cond: (sc.doctor_id = d.doctor_id)
+              Buffers: shared hit=10590 read=1693
+              ->  Nested Loop  (cost=44.61..8726.19 rows=73170 width=4) (actual time=0.156..14.843 rows=57600.00 loops=1)
+                    Buffers: shared hit=10589 read=688
+                    ->  Bitmap Heap Scan on clinics c  (cost=44.19..504.19 rows=3600 width=4) (actual time=0.149..1.403 rows=3600.00 loops=1)
+                          Recheck Cond: (city_id = 5)
+                          Heap Blocks: exact=415
+                          Buffers: shared hit=415 read=5
+                          ->  Bitmap Index Scan on idx_clinics_city  (cost=0.00..43.29 rows=3600 width=0) (actual time=0.104..0.104 rows=3600.00 loops=1)
+                                Index Cond: (city_id = 5)
+                                Index Searches: 1
+                                Buffers: shared read=5
+                    ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.42..2.00 rows=28 width=8) (actual time=0.002..0.002 rows=16.00 loops=3600)
+                          Index Cond: (clinic_id = c.clinic_id)
+                          Heap Fetches: 0
+                          Index Searches: 3600
+                          Buffers: shared hit=10174 read=683
+              ->  Hash  (cost=1149.34..1149.34 rows=7180 width=76) (actual time=4.255..4.256 rows=7200.00 loops=1)
+                    Buckets: 8192  Batches: 1  Memory Usage: 778kB
+                    Buffers: shared hit=1 read=1005
+                    ->  Bitmap Heap Scan on doctors d  (cost=58.59..1149.34 rows=7180 width=76) (actual time=0.629..3.310 rows=7200.00 loops=1)
+                          Recheck Cond: (languages @> '{Tamil}'::text[])
+                          Heap Blocks: exact=1001
+                          Buffers: shared hit=1 read=1005
+                          ->  Bitmap Index Scan on idx_doctors_languages_gin  (cost=0.00..56.79 rows=7180 width=0) (actual time=0.455..0.455 rows=7200.00 loops=1)
+                                Index Cond: (languages @> '{Tamil}'::text[])
+                                Index Searches: 1
+                                Buffers: shared hit=1 read=4
+Planning:
+  Buffers: shared hit=286 read=25
+Planning Time: 1.443 ms
+Execution Time: 124.360 ms
+=== R18 run 2 ===
+Unique  (cost=10730.70..10840.15 rows=7180 width=76) (actual time=100.796..121.621 rows=7200.00 loops=1)
+  Buffers: shared hit=12297, temp read=560 written=561
+  ->  Sort  (cost=10730.70..10752.59 rows=8756 width=76) (actual time=100.796..108.432 rows=57600.00 loops=1)
+        Sort Key: d.consultation_fee, d.doctor_id, d.full_name, d.languages
+        Sort Method: external merge  Disk: 4480kB
+        Buffers: shared hit=12297, temp read=560 written=561
+        ->  Hash Join  (cost=1283.70..10157.36 rows=8756 width=76) (actual time=4.159..26.484 rows=57600.00 loops=1)
+              Hash Cond: (sc.doctor_id = d.doctor_id)
+              Buffers: shared hit=12283
+              ->  Nested Loop  (cost=44.61..8726.19 rows=73170 width=4) (actual time=0.145..14.232 rows=57600.00 loops=1)
+                    Buffers: shared hit=11277
+                    ->  Bitmap Heap Scan on clinics c  (cost=44.19..504.19 rows=3600 width=4) (actual time=0.139..1.447 rows=3600.00 loops=1)
+                          Recheck Cond: (city_id = 5)
+                          Heap Blocks: exact=415
+                          Buffers: shared hit=420
+                          ->  Bitmap Index Scan on idx_clinics_city  (cost=0.00..43.29 rows=3600 width=0) (actual time=0.095..0.096 rows=3600.00 loops=1)
+                                Index Cond: (city_id = 5)
+                                Index Searches: 1
+                                Buffers: shared hit=5
+                    ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.42..2.00 rows=28 width=8) (actual time=0.002..0.002 rows=16.00 loops=3600)
+                          Index Cond: (clinic_id = c.clinic_id)
+                          Heap Fetches: 0
+                          Index Searches: 3600
+                          Buffers: shared hit=10857
+              ->  Hash  (cost=1149.34..1149.34 rows=7180 width=76) (actual time=3.999..4.008 rows=7200.00 loops=1)
+                    Buckets: 8192  Batches: 1  Memory Usage: 778kB
+                    Buffers: shared hit=1006
+                    ->  Bitmap Heap Scan on doctors d  (cost=58.59..1149.34 rows=7180 width=76) (actual time=0.548..3.086 rows=7200.00 loops=1)
+                          Recheck Cond: (languages @> '{Tamil}'::text[])
+                          Heap Blocks: exact=1001
+                          Buffers: shared hit=1006
+                          ->  Bitmap Index Scan on idx_doctors_languages_gin  (cost=0.00..56.79 rows=7180 width=0) (actual time=0.440..0.445 rows=7200.00 loops=1)
+                                Index Cond: (languages @> '{Tamil}'::text[])
+                                Index Searches: 1
+                                Buffers: shared hit=5
+Planning:
+  Buffers: shared hit=311
+Planning Time: 1.313 ms
+Execution Time: 123.587 ms
+=== R18 run 3 ===
+Unique  (cost=10730.70..10840.15 rows=7180 width=76) (actual time=102.244..123.768 rows=7200.00 loops=1)
+  Buffers: shared hit=12297, temp read=560 written=561
+  ->  Sort  (cost=10730.70..10752.59 rows=8756 width=76) (actual time=102.241..109.927 rows=57600.00 loops=1)
+        Sort Key: d.consultation_fee, d.doctor_id, d.full_name, d.languages
+        Sort Method: external merge  Disk: 4480kB
+        Buffers: shared hit=12297, temp read=560 written=561
+        ->  Hash Join  (cost=1283.70..10157.36 rows=8756 width=76) (actual time=4.953..28.410 rows=57600.00 loops=1)
+              Hash Cond: (sc.doctor_id = d.doctor_id)
+              Buffers: shared hit=12283
+              ->  Nested Loop  (cost=44.61..8726.19 rows=73170 width=4) (actual time=0.146..15.217 rows=57600.00 loops=1)
+                    Buffers: shared hit=11277
+                    ->  Bitmap Heap Scan on clinics c  (cost=44.19..504.19 rows=3600 width=4) (actual time=0.139..1.662 rows=3600.00 loops=1)
+                          Recheck Cond: (city_id = 5)
+                          Heap Blocks: exact=415
+                          Buffers: shared hit=420
+                          ->  Bitmap Index Scan on idx_clinics_city  (cost=0.00..43.29 rows=3600 width=0) (actual time=0.095..0.095 rows=3600.00 loops=1)
+                                Index Cond: (city_id = 5)
+                                Index Searches: 1
+                                Buffers: shared hit=5
+                    ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.42..2.00 rows=28 width=8) (actual time=0.002..0.003 rows=16.00 loops=3600)
+                          Index Cond: (clinic_id = c.clinic_id)
+                          Heap Fetches: 0
+                          Index Searches: 3600
+                          Buffers: shared hit=10857
+              ->  Hash  (cost=1149.34..1149.34 rows=7180 width=76) (actual time=4.791..4.791 rows=7200.00 loops=1)
+                    Buckets: 8192  Batches: 1  Memory Usage: 778kB
+                    Buffers: shared hit=1006
+                    ->  Bitmap Heap Scan on doctors d  (cost=58.59..1149.34 rows=7180 width=76) (actual time=0.592..3.768 rows=7200.00 loops=1)
+                          Recheck Cond: (languages @> '{Tamil}'::text[])
+                          Heap Blocks: exact=1001
+                          Buffers: shared hit=1006
+                          ->  Bitmap Index Scan on idx_doctors_languages_gin  (cost=0.00..56.79 rows=7180 width=0) (actual time=0.484..0.484 rows=7200.00 loops=1)
+                                Index Cond: (languages @> '{Tamil}'::text[])
+                                Index Searches: 1
+                                Buffers: shared hit=5
+Planning:
+  Buffers: shared hit=311
+Planning Time: 1.450 ms
+Execution Time: 125.727 ms

@@ -1,0 +1,42 @@
+=== R13 run 1 ===
+Nested Loop Anti Join  (cost=0.42..14831.88 rows=12417 width=35) (actual time=0.036..30.896 rows=10668.00 loops=1)
+  Buffers: shared hit=89318 read=1098
+  ->  Seq Scan on clinics c  (cost=0.00..715.00 rows=30000 width=35) (actual time=0.029..2.014 rows=30000.00 loops=1)
+        Buffers: shared read=415
+  ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.42..1.05 rows=28 width=4) (actual time=0.001..0.001 rows=0.64 loops=30000)
+        Index Cond: (clinic_id = c.clinic_id)
+        Heap Fetches: 0
+        Index Searches: 30000
+        Buffers: shared hit=89318 read=683
+Planning:
+  Buffers: shared hit=218 read=54
+Planning Time: 1.669 ms
+Execution Time: 31.315 ms
+=== R13 run 2 ===
+Nested Loop Anti Join  (cost=0.42..14831.88 rows=12417 width=35) (actual time=0.013..28.655 rows=10668.00 loops=1)
+  Buffers: shared hit=90416
+  ->  Seq Scan on clinics c  (cost=0.00..715.00 rows=30000 width=35) (actual time=0.007..1.870 rows=30000.00 loops=1)
+        Buffers: shared hit=415
+  ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.42..1.05 rows=28 width=4) (actual time=0.001..0.001 rows=0.64 loops=30000)
+        Index Cond: (clinic_id = c.clinic_id)
+        Heap Fetches: 0
+        Index Searches: 30000
+        Buffers: shared hit=90001
+Planning:
+  Buffers: shared hit=272
+Planning Time: 0.851 ms
+Execution Time: 29.068 ms
+=== R13 run 3 ===
+Nested Loop Anti Join  (cost=0.42..14831.88 rows=12417 width=35) (actual time=0.014..30.160 rows=10668.00 loops=1)
+  Buffers: shared hit=90416
+  ->  Seq Scan on clinics c  (cost=0.00..715.00 rows=30000 width=35) (actual time=0.007..2.180 rows=30000.00 loops=1)
+        Buffers: shared hit=415
+  ->  Index Only Scan using idx_sched_clinic_doctor on doctor_schedules sc  (cost=0.42..1.05 rows=28 width=4) (actual time=0.001..0.001 rows=0.64 loops=30000)
+        Index Cond: (clinic_id = c.clinic_id)
+        Heap Fetches: 0
+        Index Searches: 30000
+        Buffers: shared hit=90001
+Planning:
+  Buffers: shared hit=272
+Planning Time: 0.868 ms
+Execution Time: 30.572 ms

@@ -1,0 +1,63 @@
+=== R04 run 1 ===
+Nested Loop Left Join  (cost=1.01..41.14 rows=1 width=64) (actual time=0.025..0.025 rows=0.00 loops=1)
+  Buffers: shared read=4
+  ->  Nested Loop  (cost=0.72..32.84 rows=1 width=41) (actual time=0.025..0.025 rows=0.00 loops=1)
+        Buffers: shared read=4
+        ->  Index Scan using idx_appt_patient_slot on appointments a  (cost=0.43..24.53 rows=1 width=29) (actual time=0.024..0.024 rows=0.00 loops=1)
+              Index Cond: (patient_id = 90)
+              Filter: ((status)::text = 'BOOKED'::text)
+              Rows Removed by Filter: 1
+              Index Searches: 1
+              Buffers: shared read=4
+        ->  Index Scan using doctors_pkey on doctors d  (cost=0.29..8.31 rows=1 width=20) (never executed)
+              Index Cond: (doctor_id = a.doctor_id)
+              Index Searches: 0
+  ->  Index Scan using clinics_pkey on clinics c  (cost=0.29..8.30 rows=1 width=31) (never executed)
+        Index Cond: (clinic_id = a.clinic_id)
+        Index Searches: 0
+Planning:
+  Buffers: shared hit=507 read=4
+Planning Time: 1.824 ms
+Execution Time: 0.058 ms
+=== R04 run 2 ===
+Nested Loop Left Join  (cost=1.01..41.14 rows=1 width=64) (actual time=0.011..0.011 rows=0.00 loops=1)
+  Buffers: shared hit=4
+  ->  Nested Loop  (cost=0.72..32.84 rows=1 width=41) (actual time=0.010..0.011 rows=0.00 loops=1)
+        Buffers: shared hit=4
+        ->  Index Scan using idx_appt_patient_slot on appointments a  (cost=0.43..24.53 rows=1 width=29) (actual time=0.010..0.010 rows=0.00 loops=1)
+              Index Cond: (patient_id = 90)
+              Filter: ((status)::text = 'BOOKED'::text)
+              Rows Removed by Filter: 1
+              Index Searches: 1
+              Buffers: shared hit=4
+        ->  Index Scan using doctors_pkey on doctors d  (cost=0.29..8.31 rows=1 width=20) (never executed)
+              Index Cond: (doctor_id = a.doctor_id)
+              Index Searches: 0
+  ->  Index Scan using clinics_pkey on clinics c  (cost=0.29..8.30 rows=1 width=31) (never executed)
+        Index Cond: (clinic_id = a.clinic_id)
+        Index Searches: 0
+Planning:
+  Buffers: shared hit=511
+Planning Time: 1.717 ms
+Execution Time: 0.043 ms
+=== R04 run 3 ===
+Nested Loop Left Join  (cost=1.01..41.14 rows=1 width=64) (actual time=0.014..0.014 rows=0.00 loops=1)
+  Buffers: shared hit=4
+  ->  Nested Loop  (cost=0.72..32.84 rows=1 width=41) (actual time=0.014..0.014 rows=0.00 loops=1)
+        Buffers: shared hit=4
+        ->  Index Scan using idx_appt_patient_slot on appointments a  (cost=0.43..24.53 rows=1 width=29) (actual time=0.013..0.013 rows=0.00 loops=1)
+              Index Cond: (patient_id = 90)
+              Filter: ((status)::text = 'BOOKED'::text)
+              Rows Removed by Filter: 1
+              Index Searches: 1
+              Buffers: shared hit=4
+        ->  Index Scan using doctors_pkey on doctors d  (cost=0.29..8.31 rows=1 width=20) (never executed)
+              Index Cond: (doctor_id = a.doctor_id)
+              Index Searches: 0
+  ->  Index Scan using clinics_pkey on clinics c  (cost=0.29..8.30 rows=1 width=31) (never executed)
+        Index Cond: (clinic_id = a.clinic_id)
+        Index Searches: 0
+Planning:
+  Buffers: shared hit=511
+Planning Time: 1.828 ms
+Execution Time: 0.049 ms

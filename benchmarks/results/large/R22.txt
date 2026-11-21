@@ -1,0 +1,33 @@
+=== R22 run 1 ===
+Limit  (cost=3922.54..3923.52 rows=25 width=29) (actual time=11.611..11.614 rows=25.00 loops=1)
+  Buffers: shared hit=677
+  ->  Index Only Scan Backward using idx_appt_slot_covering on appointments  (cost=0.43..117673.04 rows=3000240 width=29) (actual time=0.062..8.275 rows=100025.00 loops=1)
+        Heap Fetches: 0
+        Index Searches: 1
+        Buffers: shared hit=677
+Planning:
+  Buffers: shared hit=210
+Planning Time: 0.745 ms
+Execution Time: 11.633 ms
+=== R22 run 2 ===
+Limit  (cost=3922.54..3923.52 rows=25 width=29) (actual time=12.386..12.390 rows=25.00 loops=1)
+  Buffers: shared hit=677
+  ->  Index Only Scan Backward using idx_appt_slot_covering on appointments  (cost=0.43..117673.04 rows=3000240 width=29) (actual time=0.058..9.032 rows=100025.00 loops=1)
+        Heap Fetches: 0
+        Index Searches: 1
+        Buffers: shared hit=677
+Planning:
+  Buffers: shared hit=210
+Planning Time: 0.702 ms
+Execution Time: 12.411 ms
+=== R22 run 3 ===
+Limit  (cost=3922.54..3923.52 rows=25 width=29) (actual time=11.867..11.871 rows=25.00 loops=1)
+  Buffers: shared hit=677
+  ->  Index Only Scan Backward using idx_appt_slot_covering on appointments  (cost=0.43..117673.04 rows=3000240 width=29) (actual time=0.057..8.582 rows=100025.00 loops=1)
+        Heap Fetches: 0
+        Index Searches: 1
+        Buffers: shared hit=677
+Planning:
+  Buffers: shared hit=210
+Planning Time: 0.747 ms
+Execution Time: 11.895 ms
